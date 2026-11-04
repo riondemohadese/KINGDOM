@@ -3,26 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SAMRAJYA // MI6 SOVEREIGN COMMAND CENTER</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <title>SAMRAJYA // 007 SOVEREIGN COMMAND CENTER</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg-base: #06080a;
-      --bg-panel: rgba(14, 17, 22, 0.92);
-      --bg-panel-elevated: #151921;
-      --bond-gunmetal: #202630;
-      --bond-titanium: #e2e8f0;
-      --bond-platinum: #94a3b8;
+      --bg-base: #000000;
+      --bg-panel: #000000;
+      --bg-panel-elevated: #050505;
+      --bond-gunmetal: #121212;
+      --bond-titanium: #f0f0f0;
+      --bond-platinum: #888888;
       --bond-gold: #c5a059;
-      --bond-gold-dim: #7a6332;
-      --bond-gold-glow: rgba(197, 160, 89, 0.22);
-      --bond-red: #e03131;
-      --bond-cyan: #22d3ee;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(197, 160, 89, 0.45);
+      --bond-gold-dim: #5c4720;
+      --bond-gold-glow: rgba(197, 160, 89, 0.18);
+      --bond-red: #c02626;
+      --bond-cyan: #17b8d4;
+      --border-subtle: #1c1c1c;
+      --border-focus: #c5a059;
       --success: #10b981;
     }
 
@@ -30,15 +27,12 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: 'Calisto MT', 'Calisto', serif;
     }
 
     body {
       background-color: var(--bg-base);
-      background-image: 
-        radial-gradient(ellipse at 50% 0%, rgba(32, 38, 48, 0.6) 0%, transparent 70%),
-        linear-gradient(180deg, #06080a 0%, #0a0d12 100%);
       color: var(--bond-titanium);
-      font-family: 'Space Grotesk', sans-serif;
       min-height: 100vh;
       padding: 24px 16px;
       line-height: 1.5;
@@ -62,7 +56,6 @@
       justify-content: space-between;
       align-items: center;
       gap: 16px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
       position: relative;
     }
 
@@ -77,20 +70,18 @@
     }
 
     .hud-title-box h1 {
-      font-family: 'Cinzel', serif;
-      font-size: 1.85rem;
-      letter-spacing: 5px;
+      font-size: 1.95rem;
+      letter-spacing: 4px;
       color: #ffffff;
       text-transform: uppercase;
-      font-weight: 900;
+      font-weight: 700;
     }
 
     .hud-title-box p {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--bond-platinum);
       letter-spacing: 2px;
       text-transform: uppercase;
-      font-family: 'JetBrains Mono', monospace;
     }
 
     .hud-badges {
@@ -104,9 +95,8 @@
       background: var(--bg-panel-elevated);
       border: 1px solid var(--border-subtle);
       border-radius: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 1.5px;
+      font-size: 0.78rem;
+      letter-spacing: 1px;
       color: var(--bond-titanium);
     }
 
@@ -116,12 +106,12 @@
     }
 
     .badge-007.red {
-      border-color: rgba(224, 49, 49, 0.4);
+      border-color: rgba(192, 38, 38, 0.4);
       color: #ff6b6b;
     }
 
     .badge-007.cyan {
-      border-color: rgba(34, 211, 238, 0.4);
+      border-color: rgba(23, 184, 212, 0.4);
       color: var(--bond-cyan);
     }
 
@@ -141,7 +131,7 @@
     .metric-card {
       background: var(--bg-panel);
       border: 1px solid var(--border-subtle);
-      padding: 18px 20px;
+      padding: 20px;
       border-radius: 4px;
       display: flex;
       flex-direction: column;
@@ -150,16 +140,14 @@
     }
 
     .metric-card .caption {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 0.78rem;
       color: var(--bond-platinum);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
     .metric-card .big-val {
-      font-family: 'Cinzel', serif;
-      font-size: 1.9rem;
+      font-size: 2rem;
       font-weight: 700;
       color: #ffffff;
       letter-spacing: 1px;
@@ -169,7 +157,7 @@
     .metric-card .big-val.cyan { color: var(--bond-cyan); }
 
     .metric-card .subtext {
-      font-size: 0.74rem;
+      font-size: 0.8rem;
       color: var(--bond-platinum);
     }
 
@@ -190,11 +178,10 @@
       background: var(--bg-panel);
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
-      padding: 22px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       gap: 18px;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.6);
     }
 
     .bond-panel-header {
@@ -206,8 +193,7 @@
     }
 
     .bond-panel-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.05rem;
+      font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
@@ -221,10 +207,9 @@
       background: transparent;
       border: 1px solid var(--border-subtle);
       color: var(--bond-titanium);
-      padding: 8px 14px;
+      padding: 8px 16px;
       border-radius: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.74rem;
+      font-size: 0.8rem;
       letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
@@ -240,15 +225,14 @@
       color: var(--bond-gold);
     }
 
-    .btn-007.primary {
-      background: rgba(197, 160, 89, 0.15);
-      border-color: var(--bond-gold);
-      color: var(--bond-gold);
+    .btn-007.danger {
+      border-color: rgba(192, 38, 38, 0.4);
+      color: #ff6b6b;
     }
 
-    .btn-007.primary:hover {
-      background: var(--bond-gold);
-      color: #000;
+    .btn-007.danger:hover {
+      background: var(--bond-red);
+      color: #fff;
     }
 
     .brain-stage-indicator {
@@ -270,18 +254,16 @@
 
     .stage-card.active {
       border-color: var(--bond-cyan);
-      box-shadow: 0 0 10px rgba(34, 211, 238, 0.15);
     }
 
     .stage-card .st-title {
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--bond-cyan);
-      font-family: 'JetBrains Mono', monospace;
     }
 
     .stage-card .st-desc {
-      font-size: 0.72rem;
+      font-size: 0.76rem;
       color: var(--bond-platinum);
       margin-top: 4px;
     }
@@ -291,20 +273,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #090c10;
+      background: #020202;
       border: 1px solid var(--border-subtle);
       border-radius: 4px;
-      padding: 16px;
-      position: relative;
+      padding: 18px;
     }
 
     .brain-part-details {
       width: 100%;
-      margin-top: 12px;
+      margin-top: 14px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
     }
 
     @media (max-width: 700px) {
@@ -313,22 +294,22 @@
 
     .brain-part-box {
       background: var(--bg-panel-elevated);
-      padding: 10px 12px;
+      padding: 10px 14px;
       border-left: 3px solid var(--bond-gold);
       border-radius: 2px;
     }
 
     .brain-part-box h4 {
       color: #ffffff;
-      font-size: 0.78rem;
+      font-size: 0.84rem;
       display: flex;
       justify-content: space-between;
     }
 
     .brain-part-box p {
       color: var(--bond-platinum);
-      font-size: 0.7rem;
-      margin-top: 2px;
+      font-size: 0.74rem;
+      margin-top: 3px;
     }
 
     .checklist {
@@ -341,7 +322,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 14px;
+      padding: 11px 14px;
       background: var(--bg-panel-elevated);
       border: 1px solid var(--border-subtle);
       border-radius: 3px;
@@ -352,11 +333,11 @@
 
     .task-row:hover {
       border-color: var(--bond-gold-dim);
-      background: #191f2a;
+      background: #0b0b0b;
     }
 
     .task-row.done {
-      background: rgba(16, 185, 129, 0.05);
+      background: rgba(16, 185, 129, 0.04);
       border-color: rgba(16, 185, 129, 0.3);
     }
 
@@ -366,8 +347,8 @@
     }
 
     .task-checkbox {
-      width: 16px;
-      height: 16px;
+      width: 17px;
+      height: 17px;
       border: 1.5px solid var(--bond-gold);
       border-radius: 2px;
       display: flex;
@@ -383,10 +364,10 @@
 
     .task-checkbox::after {
       content: '✔';
-      font-size: 10px;
+      font-size: 11px;
       color: #000;
       display: none;
-      font-weight: 900;
+      font-weight: 700;
     }
 
     .task-row.done .task-checkbox::after {
@@ -399,13 +380,13 @@
     }
 
     .task-title {
-      font-size: 0.82rem;
-      font-weight: 500;
+      font-size: 0.88rem;
+      font-weight: 700;
       color: #ffffff;
     }
 
     .task-desc {
-      font-size: 0.7rem;
+      font-size: 0.76rem;
       color: var(--bond-platinum);
     }
 
@@ -421,62 +402,31 @@
     .astro-item {
       background: var(--bg-panel-elevated);
       border: 1px solid var(--border-subtle);
-      padding: 10px 12px;
+      padding: 12px;
       border-radius: 2px;
     }
 
     .astro-item .planet {
-      font-family: 'Cinzel', serif;
-      font-size: 0.8rem;
+      font-size: 0.86rem;
       font-weight: 700;
       color: var(--bond-gold);
     }
 
     .astro-item .pos {
-      font-size: 0.72rem;
+      font-size: 0.76rem;
       color: var(--bond-cyan);
-      font-family: 'JetBrains Mono', monospace;
     }
 
     .astro-item .role {
-      font-size: 0.7rem;
+      font-size: 0.74rem;
       color: var(--bond-platinum);
       margin-top: 4px;
-    }
-
-    .drive-bar {
-      background: #0d1117;
-      border: 1px solid var(--border-subtle);
-      padding: 16px 20px;
-      border-radius: 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .drive-status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--bond-platinum);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--success);
-      border-radius: 50%;
-      box-shadow: 0 0 8px var(--success);
     }
 
     .progress-bar-container {
       width: 100%;
       height: 6px;
-      background: rgba(255,255,255,0.06);
+      background: #111;
       border-radius: 2px;
       overflow: hidden;
     }
@@ -490,8 +440,7 @@
 
     footer {
       text-align: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.76rem;
       color: var(--bond-platinum);
       padding: 20px;
       border-top: 1px solid var(--border-subtle);
@@ -519,8 +468,8 @@
     <div class="metric-grid">
       <div class="metric-card">
         <span class="caption">Real-Time Retention Clock</span>
-        <div class="big-val gold" id="auto-streak-text">0.00 D</div>
-        <span class="subtext" id="auto-time-detail">Calculated down to the second</span>
+        <div class="big-val gold" id="auto-streak-text">0.00 DAYS</div>
+        <span class="subtext" id="auto-time-detail">Anchored to 4 Nov 2026, 00:00 IST</span>
       </div>
 
       <div class="metric-card">
@@ -542,36 +491,17 @@
       </div>
     </div>
 
-    <div class="drive-bar">
-      <div class="drive-status">
-        <div class="status-dot"></div>
-        <span>Local Database Synced • Cloud Backup Ready for Google Drive</span>
-      </div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button class="btn-007 primary" onclick="exportDataForDrive()">
-          💾 Export Backup File (.JSON)
-        </button>
-        <button class="btn-007" onclick="document.getElementById('drive-import-input').click()">
-          📂 Restore From File
-        </button>
-        <input type="file" id="drive-import-input" style="display:none;" onchange="importDataFromFile(event)">
-        <button class="btn-007" onclick="resetTimerPrompt()">
-          ⚠ Reset Timer Anchor
-        </button>
-      </div>
-    </div>
-
     <div class="dashboard-layout">
 
       <div class="col-7" style="display:flex; flex-direction:column; gap:20px;">
         
         <div class="bond-panel">
           <div class="bond-panel-header">
-            <span class="bond-panel-title">📈 Real-Time Discipline & Neural Velocity Graph</span>
+            <span class="bond-panel-title">Real-Time Discipline & Neural Velocity Graph</span>
             <button class="btn-007" onclick="recordDailyLog()">Log Day Status</button>
           </div>
-          <p style="font-size:0.75rem; color:var(--bond-platinum);">
-            Tracks your daily protocol completion rate (%) and cumulative neural dopamine baseline over time.
+          <p style="font-size:0.78rem; color:var(--bond-platinum);">
+            Tracks daily protocol completion rate (%) and neurochemical baseline over rolling cycles.
           </p>
           <div style="height: 250px; width: 100%;">
             <canvas id="disciplineChart"></canvas>
@@ -580,7 +510,7 @@
 
         <div class="bond-panel">
           <div class="bond-panel-header">
-            <span class="bond-panel-title">🧠 Neuro-Biological Healing Radar</span>
+            <span class="bond-panel-title">Neuro-Biological Healing Radar</span>
             <span class="badge-007 cyan" id="brain-stage-pill">Phase 1: Stabilization</span>
           </div>
 
@@ -602,27 +532,27 @@
           <div class="brain-svg-container">
             <svg id="brainSvg" width="320" height="200" viewBox="0 0 320 200">
               <path d="M 60 120 C 50 70, 100 20, 170 20 C 240 20, 280 60, 270 120 C 260 150, 230 170, 190 170 C 180 185, 170 195, 160 195 C 150 195, 140 185, 135 170 C 90 170, 70 150, 60 120 Z" 
-                    fill="#151b24" stroke="#2c384a" stroke-width="2"/>
+                    fill="#080808" stroke="#1f1f1f" stroke-width="2"/>
               
               <path id="partPFC" d="M 62 105 C 55 60, 100 24, 140 24 L 140 110 C 110 115, 80 120, 62 105 Z" 
-                    fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" stroke-width="1.5" class="brain-zone"/>
-              <text x="80" y="70" fill="#22d3ee" font-size="9" font-family="'JetBrains Mono', monospace" font-weight="bold">PFC (WILLPOWER)</text>
+                    fill="rgba(23, 184, 212, 0.15)" stroke="#17b8d4" stroke-width="1.5"/>
+              <text x="80" y="70" fill="#17b8d4" font-size="9" font-family="'Calisto MT', 'Calisto', serif" font-weight="bold">PFC (WILLPOWER)</text>
 
               <circle id="partStriatum" cx="170" cy="95" r="24" 
-                      fill="rgba(197, 160, 89, 0.2)" stroke="#c5a059" stroke-width="1.5" class="brain-zone"/>
-              <text x="145" y="98" fill="#c5a059" font-size="8" font-family="'JetBrains Mono', monospace">D2 RECEPTORS</text>
+                      fill="rgba(197, 160, 89, 0.2)" stroke="#c5a059" stroke-width="1.5"/>
+              <text x="145" y="98" fill="#c5a059" font-size="8" font-family="'Calisto MT', 'Calisto', serif">D2 RECEPTORS</text>
 
               <circle id="partAmygdala" cx="150" cy="135" r="14" 
-                      fill="rgba(224, 49, 49, 0.2)" stroke="#e03131" stroke-width="1.5" class="brain-zone"/>
-              <text x="130" y="155" fill="#ff6b6b" font-size="8" font-family="'JetBrains Mono', monospace">AMYGDALA</text>
+                      fill="rgba(192, 38, 38, 0.2)" stroke="#c02626" stroke-width="1.5"/>
+              <text x="130" y="155" fill="#ff6b6b" font-size="8" font-family="'Calisto MT', 'Calisto', serif">AMYGDALA</text>
 
               <path id="partHippocampus" d="M 180 115 Q 220 125 210 145 Q 185 140 180 115 Z" 
-                    fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="1.5" class="brain-zone"/>
-              <text x="195" y="130" fill="#10b981" font-size="8" font-family="'JetBrains Mono', monospace">HIPPOCAMPUS</text>
+                    fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="1.5"/>
+              <text x="195" y="130" fill="#10b981" font-size="8" font-family="'Calisto MT', 'Calisto', serif">HIPPOCAMPUS</text>
 
               <path id="partStem" d="M 195 155 C 220 155, 230 175, 205 185 C 185 185, 175 170, 195 155 Z" 
-                    fill="#1e2633" stroke="#3b485d" stroke-width="1.5"/>
-              <text x="215" y="175" fill="#94a3b8" font-size="8" font-family="'JetBrains Mono', monospace">STEM</text>
+                    fill="#0f0f0f" stroke="#2a2a2a" stroke-width="1.5"/>
+              <text x="215" y="175" fill="#777777" font-size="8" font-family="'Calisto MT', 'Calisto', serif">STEM</text>
             </svg>
 
             <div class="brain-part-details">
@@ -632,15 +562,15 @@
               </div>
               <div class="brain-part-box" style="border-color:var(--bond-gold);">
                 <h4>Nucleus Accumbens / D2 <span id="stat-d2">8% Healed</span></h4>
-                <p>Upregulation of dopamine receptors; kills chronic craving for reels and feeds.</p>
+                <p>Upregulation of dopamine receptors; eliminates cravings for reels and digital feeds.</p>
               </div>
               <div class="brain-part-box" style="border-color:var(--bond-red);">
                 <h4>Amygdala & Vata Axis <span id="stat-amygdala">Stabilizing</span></h4>
-                <p>Reduction in involuntary anxiety, panic pacing, and mental hurricane.</p>
+                <p>Reduction in involuntary anxiety, panic pacing, and mental scatteredness.</p>
               </div>
               <div class="brain-part-box" style="border-color:var(--success);">
                 <h4>Hippocampus / Majja <span id="stat-majja">Nourishing</span></h4>
-                <p>Working memory restoration for CIF sulfur specs and contract clauses.</p>
+                <p>Working memory restoration for CIF sulfur specs and contract terms.</p>
               </div>
             </div>
           </div>
@@ -652,7 +582,7 @@
         
         <div class="bond-panel">
           <div class="bond-panel-header">
-            <span class="bond-panel-title">☑ Daily Discipline Protocols</span>
+            <span class="bond-panel-title">Daily Discipline Protocols</span>
             <button class="btn-007" onclick="resetDayChecklist()">Reset Today</button>
           </div>
           
@@ -665,7 +595,7 @@
 
         <div class="bond-panel">
           <div class="bond-panel-header">
-            <span class="bond-panel-title">☯ Astrological Command Engine</span>
+            <span class="bond-panel-title">Astrological Command Engine</span>
             <span class="badge-007 gold">Lahiri Sidereal</span>
           </div>
           <div class="astro-grid">
@@ -694,19 +624,19 @@
 
         <div class="bond-panel">
           <div class="bond-panel-header">
-            <span class="bond-panel-title" style="color:#ff6b6b;">☠ 007 Perimeter Seals</span>
+            <span class="bond-panel-title" style="color:#ff6b6b;">007 Perimeter Seals</span>
           </div>
-          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.75rem;">
-            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.78rem;">
+            <div style="padding:8px 10px; background:#0c0404; border-left:3px solid var(--bond-red); color:#ffb3b3;">
               ✖ ZERO Social Feeds (Facebook Reels, IG, YouTube Shorts completely forbidden).
             </div>
-            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+            <div style="padding:8px 10px; background:#0c0404; border-left:3px solid var(--bond-red); color:#ffb3b3;">
               ✖ ZERO Music / Audio Intoxication (Work in pure, cold acoustic silence).
             </div>
-            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+            <div style="padding:8px 10px; background:#0c0404; border-left:3px solid var(--bond-red); color:#ffb3b3;">
               ✖ ZERO Phone in Bed or Bathroom (Air Gap strictly enforced on wooden desk).
             </div>
-            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+            <div style="padding:8px 10px; background:#0c0404; border-left:3px solid var(--bond-red); color:#ffb3b3;">
               ✖ ZERO Daytime Lounging (Sleeping mat folded & locked in cupboard at wake-up).
             </div>
           </div>
@@ -717,12 +647,14 @@
     </div>
 
     <footer>
-      SAMRAJYA COMMAND • 007 EXECUTIVE PROTOCOL • PERSISTENT LOCALSTORAGE & GOOGLE DRIVE COMPATIBLE
+      SAMRAJYA COMMAND • 007 EXECUTIVE PROTOCOL • ANCHORED 4 NOV 2026, 00:00 IST
     </footer>
 
   </div>
 
   <script>
+    const ANCHOR_START_MS = new Date('2026-11-04T00:00:00+05:30').getTime();
+
     const dailyProtocols = [
       { id: 't1', title: '05:00 AM Biological Ignition', desc: 'Mat folded & stowed in cupboard. Warm plain water sipped seated in Malasana.' },
       { id: 't2', title: 'Empty-Hands Elimination', desc: 'Bowel evacuation with ZERO screens in bathroom. Downward Apana cleared.' },
@@ -736,17 +668,8 @@
       { id: 't10', title: '06:00 PM Digital Iron Curtain', desc: 'Hard phone shutdown/quarantine. Total elimination of reels, YouTube, and music.' }
     ];
 
-    const KEY_START_TIME = 'bond_sr_start_timestamp_v2';
-    const KEY_TODAY_TASKS = 'bond_tasks_completed_v2';
-    const KEY_HISTORY_DATA = 'bond_history_chart_v2';
-
-    let startTimestamp = localStorage.getItem(KEY_START_TIME);
-    if (!startTimestamp) {
-      startTimestamp = Date.now();
-      localStorage.setItem(KEY_START_TIME, startTimestamp);
-    } else {
-      startTimestamp = parseInt(startTimestamp);
-    }
+    const KEY_TODAY_TASKS = 'bond_calisto_tasks_v3';
+    const KEY_HISTORY_DATA = 'bond_calisto_chart_v3';
 
     let todayTasks = JSON.parse(localStorage.getItem(KEY_TODAY_TASKS)) || {};
     let chartHistory = JSON.parse(localStorage.getItem(KEY_HISTORY_DATA)) || [
@@ -763,7 +686,7 @@
 
     function updateRealTimeCounter() {
       const now = Date.now();
-      const elapsedMs = Math.max(0, now - startTimestamp);
+      const elapsedMs = Math.max(0, now - ANCHOR_START_MS);
       const totalSeconds = Math.floor(elapsedMs / 1000);
       const days = (totalSeconds / 86400).toFixed(2);
       const hours = Math.floor((totalSeconds % 86400) / 3600);
@@ -771,20 +694,12 @@
       const seconds = totalSeconds % 60;
 
       document.getElementById('auto-streak-text').innerText = `${days} DAYS`;
-      document.getElementById('auto-time-detail').innerText = `${hours}h ${minutes}m ${seconds}s clean containment`;
+      document.getElementById('auto-time-detail').innerText = `${hours}h ${minutes}m ${seconds}s clean since 4 Nov 00:00 IST`;
 
       updateBrainStatus(parseFloat(days));
     }
 
     setInterval(updateRealTimeCounter, 1000);
-
-    function resetTimerPrompt() {
-      if (confirm('Acknowledge reset and anchor new start timestamp to NOW?')) {
-        startTimestamp = Date.now();
-        localStorage.setItem(KEY_START_TIME, startTimestamp);
-        updateRealTimeCounter();
-      }
-    }
 
     function updateBrainStatus(daysElapsed) {
       let healPct = Math.min(100, Math.round((daysElapsed / 40) * 100));
@@ -808,7 +723,7 @@
         stage1.classList.add('active');
         pill.innerText = 'Phase 1: Stabilization';
         document.getElementById('brain-heal-status').innerText = 'Phase 1: Vata Stabilization';
-        pfcZone.setAttribute('fill', 'rgba(34, 211, 238, 0.2)');
+        pfcZone.setAttribute('fill', 'rgba(23, 184, 212, 0.2)');
         striatumZone.setAttribute('fill', 'rgba(197, 160, 89, 0.25)');
         document.getElementById('stat-pfc').innerText = `${Math.min(30, Math.round(daysElapsed * 3))}% Healed`;
         document.getElementById('stat-d2').innerText = `${Math.min(25, Math.round(daysElapsed * 2.5))}% Healed`;
@@ -816,7 +731,7 @@
         stage2.classList.add('active');
         pill.innerText = 'Phase 2: D2 Re-Sensitization';
         document.getElementById('brain-heal-status').innerText = 'Phase 2: Receptor Upregulation';
-        pfcZone.setAttribute('fill', 'rgba(34, 211, 238, 0.45)');
+        pfcZone.setAttribute('fill', 'rgba(23, 184, 212, 0.45)');
         striatumZone.setAttribute('fill', 'rgba(197, 160, 89, 0.5)');
         document.getElementById('stat-pfc').innerText = `${Math.min(65, 30 + Math.round((daysElapsed - 10) * 2.3))}% Healed`;
         document.getElementById('stat-d2').innerText = `${Math.min(60, 25 + Math.round((daysElapsed - 10) * 2.3))}% Healed`;
@@ -824,7 +739,7 @@
         stage3.classList.add('active');
         pill.innerText = 'Phase 3: Sovereign Ojas';
         document.getElementById('brain-heal-status').innerText = 'Phase 3: Tejas & High Sovereign Will';
-        pfcZone.setAttribute('fill', 'rgba(34, 211, 238, 0.7)');
+        pfcZone.setAttribute('fill', 'rgba(23, 184, 212, 0.7)');
         striatumZone.setAttribute('fill', 'rgba(197, 160, 89, 0.75)');
         document.getElementById('stat-pfc').innerText = `${Math.min(100, 65 + Math.round((daysElapsed - 25) * 2.3))}% Sovereign`;
         document.getElementById('stat-d2').innerText = `${Math.min(100, 60 + Math.round((daysElapsed - 25) * 2.6))}% Restored`;
@@ -895,12 +810,12 @@
             label: 'Discipline & Neural Velocity (%)',
             data: data,
             borderColor: '#c5a059',
-            backgroundColor: 'rgba(197, 160, 89, 0.08)',
+            backgroundColor: 'rgba(197, 160, 89, 0.05)',
             borderWidth: 2,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#22d3ee',
-            pointBorderColor: '#0b0c10',
+            pointBackgroundColor: '#17b8d4',
+            pointBorderColor: '#000000',
             pointRadius: 4
           }]
         },
@@ -911,12 +826,12 @@
             y: {
               min: 0,
               max: 100,
-              grid: { color: 'rgba(255, 255, 255, 0.05)' },
-              ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+              grid: { color: 'rgba(255, 255, 255, 0.04)' },
+              ticks: { color: '#888888', font: { family: 'Calisto MT', size: 11 } }
             },
             x: {
-              grid: { color: 'rgba(255, 255, 255, 0.05)' },
-              ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+              grid: { color: 'rgba(255, 255, 255, 0.04)' },
+              ticks: { color: '#888888', font: { family: 'Calisto MT', size: 11 } }
             }
           },
           plugins: {
@@ -940,62 +855,6 @@
       chartInstance.data.labels = chartHistory.map(item => item.day);
       chartInstance.data.datasets[0].data = chartHistory.map(item => item.score);
       chartInstance.update();
-      alert(`Today's execution score (${currentScore}%) logged onto the tactical chart!`);
-    }
-
-    function exportDataForDrive() {
-      const exportObject = {
-        app: 'Samrajya_007_Command_Center',
-        export_date: new Date().toISOString(),
-        startTimestamp: startTimestamp,
-        todayTasks: todayTasks,
-        chartHistory: chartHistory
-      };
-
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObject, null, 2));
-      const downloadAnchor = document.createElement('a');
-      downloadAnchor.setAttribute("href", dataStr);
-      downloadAnchor.setAttribute("download", `SAMRAJYA_BACKUP_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(downloadAnchor);
-      downloadAnchor.click();
-      downloadAnchor.remove();
-
-      alert("Backup JSON file generated! Save this file directly into your Google Drive folder for safe keeping.");
-    }
-
-    function importDataFromFile(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const imported = JSON.parse(e.target.result);
-          if (imported.startTimestamp) {
-            startTimestamp = imported.startTimestamp;
-            localStorage.setItem(KEY_START_TIME, startTimestamp);
-          }
-          if (imported.todayTasks) {
-            todayTasks = imported.todayTasks;
-            localStorage.setItem(KEY_TODAY_TASKS, JSON.stringify(todayTasks));
-          }
-          if (imported.chartHistory) {
-            chartHistory = imported.chartHistory;
-            localStorage.setItem(KEY_HISTORY_DATA, JSON.stringify(chartHistory));
-          }
-          renderTasks();
-          updateRealTimeCounter();
-          if (chartInstance) {
-            chartInstance.data.labels = chartHistory.map(item => item.day);
-            chartInstance.data.datasets[0].data = chartHistory.map(item => item.score);
-            chartInstance.update();
-          }
-          alert("Successfully restored command center data from file!");
-        } catch (err) {
-          alert("Invalid backup JSON file.");
-        }
-      };
-      reader.readAsText(file);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
