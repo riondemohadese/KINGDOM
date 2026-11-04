@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SAMRAJYA WAR MAP // SOVEREIGN COMMAND CENTER</title>
+  <title>SAMRAJYA // MI6 SOVEREIGN COMMAND CENTER</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg-primary: #07090e;
-      --bg-card: rgba(15, 20, 31, 0.85);
-      --bg-card-hover: rgba(22, 30, 48, 0.95);
-      --gold: #d4af37;
-      --gold-dim: #8c7322;
-      --gold-glow: rgba(212, 175, 55, 0.25);
-      --accent-red: #c0392b;
-      --accent-cyan: #00d2d3;
-      --text-main: #e2e8f0;
-      --text-muted: #94a3b8;
-      --border: rgba(212, 175, 55, 0.2);
-      --border-bright: rgba(212, 175, 55, 0.5);
+      --bg-base: #06080a;
+      --bg-panel: rgba(14, 17, 22, 0.92);
+      --bg-panel-elevated: #151921;
+      --bond-gunmetal: #202630;
+      --bond-titanium: #e2e8f0;
+      --bond-platinum: #94a3b8;
+      --bond-gold: #c5a059;
+      --bond-gold-dim: #7a6332;
+      --bond-gold-glow: rgba(197, 160, 89, 0.22);
+      --bond-red: #e03131;
+      --bond-cyan: #22d3ee;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(197, 160, 89, 0.45);
       --success: #10b981;
     }
 
@@ -31,694 +33,975 @@
     }
 
     body {
-      background-color: var(--bg-primary);
+      background-color: var(--bg-base);
       background-image: 
-        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-        linear-gradient(to bottom, rgba(7, 9, 14, 0.95), rgba(7, 9, 14, 0.98));
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
+        radial-gradient(ellipse at 50% 0%, rgba(32, 38, 48, 0.6) 0%, transparent 70%),
+        linear-gradient(180deg, #06080a 0%, #0a0d12 100%);
+      color: var(--bond-titanium);
+      font-family: 'Space Grotesk', sans-serif;
       min-height: 100vh;
       padding: 24px 16px;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .container {
-      max-width: 1280px;
+      max-width: 1400px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
     }
 
     header {
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      padding: 28px 24px;
-      border-radius: 8px;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 24px var(--gold-glow);
-    }
-
-    header h1 {
-      font-family: 'Cinzel', serif;
-      font-size: 2.2rem;
-      font-weight: 900;
-      letter-spacing: 4px;
-      color: var(--gold);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    header p {
-      color: var(--text-muted);
-      font-size: 0.88rem;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-
-    .badge-bar {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid var(--border);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
       border-radius: 4px;
-      font-size: 0.8rem;
-      color: var(--gold);
-      letter-spacing: 1px;
+      padding: 24px 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      position: relative;
     }
 
-    .badge.red {
-      border-color: var(--accent-red);
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--bond-gold), transparent);
+    }
+
+    .hud-title-box h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.85rem;
+      letter-spacing: 5px;
+      color: #ffffff;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .hud-title-box p {
+      font-size: 0.8rem;
+      color: var(--bond-platinum);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .hud-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge-007 {
+      padding: 6px 14px;
+      background: var(--bg-panel-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      color: var(--bond-titanium);
+    }
+
+    .badge-007.gold {
+      border-color: var(--bond-gold-dim);
+      color: var(--bond-gold);
+    }
+
+    .badge-007.red {
+      border-color: rgba(224, 49, 49, 0.4);
       color: #ff6b6b;
     }
 
-    .badge.cyan {
-      border-color: var(--accent-cyan);
-      color: var(--accent-cyan);
+    .badge-007.cyan {
+      border-color: rgba(34, 211, 238, 0.4);
+      color: var(--bond-cyan);
     }
 
-    .dashboard-grid {
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 1100px) {
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .metric-grid { grid-template-columns: 1fr; }
+    }
+
+    .metric-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      padding: 18px 20px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .metric-card .caption {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--bond-platinum);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .metric-card .big-val {
+      font-family: 'Cinzel', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    .metric-card .big-val.gold { color: var(--bond-gold); }
+    .metric-card .big-val.cyan { color: var(--bond-cyan); }
+
+    .metric-card .subtext {
+      font-size: 0.74rem;
+      color: var(--bond-platinum);
+    }
+
+    .dashboard-layout {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 20px;
     }
 
-    .col-12 { grid-column: span 12; }
-    .col-6 { grid-column: span 6; }
+    .col-7 { grid-column: span 7; }
+    .col-5 { grid-column: span 5; }
 
-    @media (max-width: 992px) {
-      .col-6 { grid-column: span 12; }
+    @media (max-width: 1024px) {
+      .col-7, .col-5 { grid-column: span 12; }
     }
 
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+    .bond-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
       padding: 22px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      transition: border-color 0.2s, background 0.2s;
+      gap: 18px;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.6);
     }
 
-    .card:hover {
-      border-color: var(--border-bright);
-      background: var(--bg-card-hover);
-    }
-
-    .card-header {
+    .bond-panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
     }
 
-    .card-title {
+    .bond-panel-title {
       font-family: 'Cinzel', serif;
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      color: var(--gold);
       letter-spacing: 2px;
       text-transform: uppercase;
+      color: var(--bond-gold);
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .target-banner {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(192, 57, 43, 0.12) 100%);
-      border: 1px solid var(--border-bright);
-      padding: 20px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-around;
+    .btn-007 {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--bond-titanium);
+      padding: 8px 14px;
+      border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      text-align: center;
+      gap: 6px;
     }
 
-    .stat-item .label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 1px;
-      text-transform: uppercase;
+    .btn-007:hover {
+      background: var(--bond-gunmetal);
+      border-color: var(--bond-gold);
+      color: var(--bond-gold);
     }
 
-    .stat-item .val {
-      font-size: 1.8rem;
+    .btn-007.primary {
+      background: rgba(197, 160, 89, 0.15);
+      border-color: var(--bond-gold);
+      color: var(--bond-gold);
+    }
+
+    .btn-007.primary:hover {
+      background: var(--bond-gold);
+      color: #000;
+    }
+
+    .brain-stage-indicator {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .brain-stage-indicator { grid-template-columns: 1fr; }
+    }
+
+    .stage-card {
+      background: var(--bg-panel-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 12px;
+      border-radius: 3px;
+    }
+
+    .stage-card.active {
+      border-color: var(--bond-cyan);
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.15);
+    }
+
+    .stage-card .st-title {
+      font-size: 0.78rem;
       font-weight: 700;
-      color: var(--gold);
-      font-family: 'Cinzel', serif;
+      color: var(--bond-cyan);
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .stat-item .sub {
-      font-size: 0.75rem;
-      color: var(--accent-cyan);
+    .stage-card .st-desc {
+      font-size: 0.72rem;
+      color: var(--bond-platinum);
+      margin-top: 4px;
     }
 
-    .astro-table {
+    .brain-svg-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #090c10;
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 16px;
+      position: relative;
+    }
+
+    .brain-part-details {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-    }
-
-    .astro-table th, .astro-table td {
-      padding: 10px 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      text-align: left;
-    }
-
-    .astro-table th {
-      color: var(--gold);
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      border-bottom: 1px solid var(--border);
     }
 
-    .astro-table td.highlight {
-      color: var(--accent-cyan);
-      font-weight: bold;
+    @media (max-width: 700px) {
+      .brain-part-details { grid-template-columns: 1fr; }
+    }
+
+    .brain-part-box {
+      background: var(--bg-panel-elevated);
+      padding: 10px 12px;
+      border-left: 3px solid var(--bond-gold);
+      border-radius: 2px;
+    }
+
+    .brain-part-box h4 {
+      color: #ffffff;
+      font-size: 0.78rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .brain-part-box p {
+      color: var(--bond-platinum);
+      font-size: 0.7rem;
+      margin-top: 2px;
     }
 
     .checklist {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .check-item {
+    .task-row {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 12px;
       padding: 10px 14px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 6px;
+      background: var(--bg-panel-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 3px;
       cursor: pointer;
       user-select: none;
       transition: all 0.2s;
     }
 
-    .check-item:hover {
-      border-color: var(--gold-dim);
-      background: rgba(0, 0, 0, 0.6);
+    .task-row:hover {
+      border-color: var(--bond-gold-dim);
+      background: #191f2a;
     }
 
-    .check-item.completed {
-      background: rgba(16, 185, 129, 0.08);
-      border-color: rgba(16, 185, 129, 0.4);
+    .task-row.done {
+      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(16, 185, 129, 0.3);
     }
 
-    .check-item.completed .item-text {
+    .task-row.done .task-title {
       text-decoration: line-through;
-      color: var(--text-muted);
+      color: var(--bond-platinum);
     }
 
-    .check-box {
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--gold);
-      border-radius: 3px;
+    .task-checkbox {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--bond-gold);
+      border-radius: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 3px;
       transition: background 0.2s;
     }
 
-    .check-item.completed .check-box {
-      background: var(--gold);
+    .task-row.done .task-checkbox {
+      background: var(--bond-gold);
     }
 
-    .check-box::after {
+    .task-checkbox::after {
       content: '✔';
-      font-size: 11px;
+      font-size: 10px;
       color: #000;
       display: none;
-      font-weight: bold;
+      font-weight: 900;
     }
 
-    .check-item.completed .check-box::after {
+    .task-row.done .task-checkbox::after {
       display: block;
     }
 
-    .item-content {
+    .task-meta {
       display: flex;
       flex-direction: column;
-      gap: 2px;
     }
 
-    .item-text {
-      font-size: 0.88rem;
+    .task-title {
+      font-size: 0.82rem;
       font-weight: 500;
-      color: var(--text-main);
+      color: #ffffff;
     }
 
-    .item-desc {
-      font-size: 0.74rem;
-      color: var(--text-muted);
+    .task-desc {
+      font-size: 0.7rem;
+      color: var(--bond-platinum);
     }
 
-    .btn {
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
+    .astro-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 700px) {
+      .astro-grid { grid-template-columns: 1fr; }
+    }
+
+    .astro-item {
+      background: var(--bg-panel-elevated);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      border-radius: 2px;
+    }
+
+    .astro-item .planet {
+      font-family: 'Cinzel', serif;
       font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+      font-weight: 700;
+      color: var(--bond-gold);
     }
 
-    .btn:hover {
-      background: var(--gold);
-      color: #000;
-      box-shadow: 0 0 15px var(--gold-glow);
+    .astro-item .pos {
+      font-size: 0.72rem;
+      color: var(--bond-cyan);
+      font-family: 'JetBrains Mono', monospace;
     }
 
-    .btn-danger {
-      border-color: var(--accent-red);
-      color: #ff6b6b;
+    .astro-item .role {
+      font-size: 0.7rem;
+      color: var(--bond-platinum);
+      margin-top: 4px;
     }
 
-    .btn-danger:hover {
-      background: var(--accent-red);
-      color: #fff;
+    .drive-bar {
+      background: #0d1117;
+      border: 1px solid var(--border-subtle);
+      padding: 16px 20px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
-    .counter-box {
+    .drive-status {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px 18px;
+      gap: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--bond-platinum);
     }
 
-    .counter-display {
-      font-family: 'Cinzel', serif;
-      font-size: 2rem;
-      color: var(--gold);
-      font-weight: bold;
-    }
-
-    .counter-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .progress-track {
-      width: 100%;
+    .status-dot {
+      width: 8px;
       height: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-top: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
     }
 
-    .progress-fill {
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .progress-bar-val {
       height: 100%;
-      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      background: linear-gradient(90deg, var(--bond-gold-dim), var(--bond-gold));
       width: 0%;
       transition: width 0.3s ease;
     }
 
-    .journal-input {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      padding: 12px;
-      border-radius: 6px;
-      resize: vertical;
-      min-height: 90px;
-    }
-
-    .journal-input:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-
-    .prohibitions-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 0.82rem;
-    }
-
-    .prohibitions-list li {
-      padding: 8px 12px;
-      background: rgba(192, 57, 43, 0.08);
-      border-left: 3px solid var(--accent-red);
-      color: #fca5a5;
-    }
-
     footer {
       text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--bond-platinum);
       padding: 20px;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      letter-spacing: 1.5px;
-      border-top: 1px solid var(--border);
-      margin-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      letter-spacing: 2px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+    
     <header>
-      <h1>SAMRAJYA WAR MAP // 2026</h1>
-      <p>Sovereign Operational Matrix & Daily Discipline Command Center</p>
-      <div class="badge-bar">
-        <span class="badge">ASC & MOON: LIBRA (SWATI)</span>
-        <span class="badge">MAHADASHA: SATURN - MERCURY (11H LABHA)</span>
-        <span class="badge red">AIR GAP PROTOCOL: ACTIVE</span>
-        <span class="badge cyan">MONTHLY TARGET: $1,000,000 MONETIZATION</span>
+      <div class="hud-title-box">
+        <h1>SAMRAJYA // 007 PROTOCOL</h1>
+        <p>Sovereign Tactical Command Center • November 2026</p>
+      </div>
+      <div class="hud-badges">
+        <span class="badge-007">007 STEALTH MATRIX</span>
+        <span class="badge-007 gold">SATURN-MERCURY DASHA (11H LABHA)</span>
+        <span class="badge-007 red">AIR GAP ACTIVE</span>
+        <span class="badge-007 cyan">TARGET: $1,000,000 CIF SETTLEMENT</span>
       </div>
     </header>
 
-    <div class="target-banner">
-      <div class="stat-item">
-        <div class="label">Primary Monthly Objective</div>
-        <div class="val">$1,000,000</div>
-        <div class="sub">November 2026 CIF Sulfur Monetization</div>
+    <div class="metric-grid">
+      <div class="metric-card">
+        <span class="caption">Real-Time Retention Clock</span>
+        <div class="big-val gold" id="auto-streak-text">0.00 D</div>
+        <span class="subtext" id="auto-time-detail">Calculated down to the second</span>
       </div>
-      <div class="stat-item">
-        <div class="label">Semen Retention (Brahmacharya)</div>
-        <div class="val" id="streak-counter">0 DAYS</div>
-        <div class="sub">Transmutation: Shukra → Ojas → Tejas</div>
+
+      <div class="metric-card">
+        <span class="caption">Primary Target (Nov 2026)</span>
+        <div class="big-val">$1,000,000</div>
+        <span class="subtext">CIF Sulfur Consignment Liquidation</span>
       </div>
-      <div class="stat-item">
-        <div class="label">Today's Discipline Completion</div>
-        <div class="val" id="compliance-pct">0%</div>
-        <div class="sub" id="compliance-count">0 / 0 Tasks Locked</div>
+
+      <div class="metric-card">
+        <span class="caption">Today's Protocol Adherence</span>
+        <div class="big-val cyan" id="tasks-pct">0%</div>
+        <span class="subtext" id="tasks-count">0 of 10 Protocols Locked</span>
+      </div>
+
+      <div class="metric-card">
+        <span class="caption">Neural Receptor Recovery</span>
+        <div class="big-val" id="brain-heal-pct">5%</div>
+        <span class="subtext" id="brain-heal-status">Phase 1: Withdrawal & Stabilization</span>
       </div>
     </div>
 
-    <div class="dashboard-grid">
-      <!-- COLUMN LEFT -->
-      <div class="col-6" style="display:flex; flex-direction:column; gap:20px;">
+    <div class="drive-bar">
+      <div class="drive-status">
+        <div class="status-dot"></div>
+        <span>Local Database Synced • Cloud Backup Ready for Google Drive</span>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn-007 primary" onclick="exportDataForDrive()">
+          💾 Export Backup File (.JSON)
+        </button>
+        <button class="btn-007" onclick="document.getElementById('drive-import-input').click()">
+          📂 Restore From File
+        </button>
+        <input type="file" id="drive-import-input" style="display:none;" onchange="importDataFromFile(event)">
+        <button class="btn-007" onclick="resetTimerPrompt()">
+          ⚠ Reset Timer Anchor
+        </button>
+      </div>
+    </div>
+
+    <div class="dashboard-layout">
+
+      <div class="col-7" style="display:flex; flex-direction:column; gap:20px;">
         
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">☯ Sidereal Planetary Engine</span>
-            <span class="badge">Lahiri Ayanamsha</span>
+        <div class="bond-panel">
+          <div class="bond-panel-header">
+            <span class="bond-panel-title">📈 Real-Time Discipline & Neural Velocity Graph</span>
+            <button class="btn-007" onclick="recordDailyLog()">Log Day Status</button>
           </div>
-          <table class="astro-table">
-            <thead>
-              <tr>
-                <th>Planet / Graha</th>
-                <th>House / Rashi</th>
-                <th>Status & Operational Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="highlight">Saturn (Shani)</td>
-                <td>8H Taurus (Rohini) → Transit 6H Pisces</td>
-                <td>Yogakaraka Mahadasha Lord. Heavy extraction, sulfur liquidation, legal compliance.</td>
-              </tr>
-              <tr>
-                <td class="highlight">Mercury (Budha)</td>
-                <td>11H Leo (Magha) • Dasha Sub-Lord</td>
-                <td>9th/12th Lord in 11H (Labha). Monetization of CIF shipping & banking instruments.</td>
-              </tr>
-              <tr>
-                <td class="highlight">Jupiter (Guru)</td>
-                <td>10H Cancer (Pushya) → Transit 11H Leo</td>
-                <td>Hamsa Yoga / Exalted. State-level sovereign scale & banking acceptance.</td>
-              </tr>
-              <tr>
-                <td class="highlight">Mars (Kuja)</td>
-                <td>10H Cancer (Neechabhanga)</td>
-                <td>Tactical friction transmuted into relentless commercial execution.</td>
-              </tr>
-              <tr>
-                <td class="highlight">Venus (Shukra)</td>
-                <td>12H Virgo (Debilitated)</td>
-                <td>The Leak Vector: Bed comforts & isolation escapism. Transmuted via Urdhvaretas.</td>
-              </tr>
-              <tr>
-                <td class="highlight">Rahu & Ketu</td>
-                <td>8H Taurus / 2H Scorpio • Ketu in 11H</td>
-                <td>Ketu over 11H Mercury filters broker noise; demands verified signatories only.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">⚖ November CIF Sulfur Checklist</span>
-            <span class="badge cyan">UCP 600 Compliance</span>
-          </div>
-          <p style="font-size:0.78rem; color:var(--text-muted);">
-            Direct execution pipeline to force $1,000,000 cash settlement via Letter of Credit & clean document liquidation:
+          <p style="font-size:0.75rem; color:var(--bond-platinum);">
+            Tracks your daily protocol completion rate (%) and cumulative neural dopamine baseline over time.
           </p>
-          <div class="checklist" id="business-checklist"></div>
+          <div style="height: 250px; width: 100%;">
+            <canvas id="disciplineChart"></canvas>
+          </div>
         </div>
 
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title" style="color:#ff6b6b;">☠ Non-Negotiable Perimeter Seals</span>
-            <span class="badge red">Strict Elimination</span>
+        <div class="bond-panel">
+          <div class="bond-panel-header">
+            <span class="bond-panel-title">🧠 Neuro-Biological Healing Radar</span>
+            <span class="badge-007 cyan" id="brain-stage-pill">Phase 1: Stabilization</span>
           </div>
-          <ul class="prohibitions-list">
-            <li>✖ ZERO Social Media Feeds (Facebook Reels, Instagram Reels, YouTube Shorts).</li>
-            <li>✖ ZERO Lyrical / Dramatic Music (Spotify closed; absolute silence at desk).</li>
-            <li>✖ ZERO Phone in Bed or Bathroom (Enforce Air Gap & Wooden Desk Docking).</li>
-            <li>✖ ZERO Intermediary Daisy-Chains (Verified signatories & bank SWIFT lines only).</li>
-            <li>✖ ZERO Daytime Lounging (Sleeping mat stowed in cupboard upon waking).</li>
-          </ul>
+
+          <div class="brain-stage-indicator">
+            <div class="stage-card" id="stage-card-1">
+              <div class="st-title">DAYS 1 - 10</div>
+              <div class="st-desc">Acute withdrawal, Vata down-regulation, vagus nerve restabilization.</div>
+            </div>
+            <div class="stage-card" id="stage-card-2">
+              <div class="st-title">DAYS 11 - 25</div>
+              <div class="st-desc">D2 dopamine receptor up-regulation, androgen receptor sensitization.</div>
+            </div>
+            <div class="stage-card" id="stage-card-3">
+              <div class="st-title">DAYS 26 - 40+</div>
+              <div class="st-desc">PFC gray matter density, Shukra → Ojas, Tejas sovereignty.</div>
+            </div>
+          </div>
+
+          <div class="brain-svg-container">
+            <svg id="brainSvg" width="320" height="200" viewBox="0 0 320 200">
+              <path d="M 60 120 C 50 70, 100 20, 170 20 C 240 20, 280 60, 270 120 C 260 150, 230 170, 190 170 C 180 185, 170 195, 160 195 C 150 195, 140 185, 135 170 C 90 170, 70 150, 60 120 Z" 
+                    fill="#151b24" stroke="#2c384a" stroke-width="2"/>
+              
+              <path id="partPFC" d="M 62 105 C 55 60, 100 24, 140 24 L 140 110 C 110 115, 80 120, 62 105 Z" 
+                    fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" stroke-width="1.5" class="brain-zone"/>
+              <text x="80" y="70" fill="#22d3ee" font-size="9" font-family="'JetBrains Mono', monospace" font-weight="bold">PFC (WILLPOWER)</text>
+
+              <circle id="partStriatum" cx="170" cy="95" r="24" 
+                      fill="rgba(197, 160, 89, 0.2)" stroke="#c5a059" stroke-width="1.5" class="brain-zone"/>
+              <text x="145" y="98" fill="#c5a059" font-size="8" font-family="'JetBrains Mono', monospace">D2 RECEPTORS</text>
+
+              <circle id="partAmygdala" cx="150" cy="135" r="14" 
+                      fill="rgba(224, 49, 49, 0.2)" stroke="#e03131" stroke-width="1.5" class="brain-zone"/>
+              <text x="130" y="155" fill="#ff6b6b" font-size="8" font-family="'JetBrains Mono', monospace">AMYGDALA</text>
+
+              <path id="partHippocampus" d="M 180 115 Q 220 125 210 145 Q 185 140 180 115 Z" 
+                    fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="1.5" class="brain-zone"/>
+              <text x="195" y="130" fill="#10b981" font-size="8" font-family="'JetBrains Mono', monospace">HIPPOCAMPUS</text>
+
+              <path id="partStem" d="M 195 155 C 220 155, 230 175, 205 185 C 185 185, 175 170, 195 155 Z" 
+                    fill="#1e2633" stroke="#3b485d" stroke-width="1.5"/>
+              <text x="215" y="175" fill="#94a3b8" font-size="8" font-family="'JetBrains Mono', monospace">STEM</text>
+            </svg>
+
+            <div class="brain-part-details">
+              <div class="brain-part-box" style="border-color:var(--bond-cyan);">
+                <h4>Prefrontal Cortex (PFC) <span id="stat-pfc">15% Healed</span></h4>
+                <p>Governs delayed gratification, non-reaction to triggers, and executive focus.</p>
+              </div>
+              <div class="brain-part-box" style="border-color:var(--bond-gold);">
+                <h4>Nucleus Accumbens / D2 <span id="stat-d2">8% Healed</span></h4>
+                <p>Upregulation of dopamine receptors; kills chronic craving for reels and feeds.</p>
+              </div>
+              <div class="brain-part-box" style="border-color:var(--bond-red);">
+                <h4>Amygdala & Vata Axis <span id="stat-amygdala">Stabilizing</span></h4>
+                <p>Reduction in involuntary anxiety, panic pacing, and mental hurricane.</p>
+              </div>
+              <div class="brain-part-box" style="border-color:var(--success);">
+                <h4>Hippocampus / Majja <span id="stat-majja">Nourishing</span></h4>
+                <p>Working memory restoration for CIF sulfur specs and contract clauses.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
 
-      <!-- COLUMN RIGHT -->
-      <div class="col-6" style="display:flex; flex-direction:column; gap:20px;">
+      <div class="col-5" style="display:flex; flex-direction:column; gap:20px;">
         
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">⚔ Brahmacharya Counter</span>
-            <span class="badge">Vitality Engine</span>
-          </div>
-          <div class="counter-box">
-            <div>
-              <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Current Clean Streak</div>
-              <div class="counter-display" id="streak-num">0</div>
-              <div style="font-size:0.75rem; color:var(--gold);">Consecutive Days Contained</div>
-            </div>
-            <div class="counter-actions">
-              <button class="btn" onclick="updateStreak(1)">+1 Day</button>
-              <button class="btn" onclick="updateStreak(-1)">-1</button>
-              <button class="btn btn-danger" onclick="resetStreak()">Reset</button>
-            </div>
-          </div>
-          <p style="font-size:0.75rem; color:var(--text-muted);">
-            Biological Timeline: Days 1-10 (Withdrawal/Vata calm) • Days 11-20 (Pelvic Heat/Androgen binding) • Days 21-40 (Ojas & Tejas crystallization).
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">☑ Daily Discipline Protocols</span>
-            <button class="btn" style="padding:4px 10px; font-size:0.72rem;" onclick="resetDailyChecklist()">Reset Today</button>
+        <div class="bond-panel">
+          <div class="bond-panel-header">
+            <span class="bond-panel-title">☑ Daily Discipline Protocols</span>
+            <button class="btn-007" onclick="resetDayChecklist()">Reset Today</button>
           </div>
           
-          <div>
-            <div style="display:flex; justify-content:space-between; font-size:0.78rem;">
-              <span>Daily Protocol Adherence</span>
-              <span id="progress-text" style="color:var(--gold);">0%</span>
-            </div>
-            <div class="progress-track">
-              <div class="progress-fill" id="progress-fill"></div>
-            </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-val" id="progress-bar-fill"></div>
           </div>
 
-          <div class="checklist" id="daily-checklist"></div>
+          <div class="checklist" id="dailyProtocolsList"></div>
         </div>
 
-        <div class="card">
-          <div class="card-header">
-            <span class="card-title">✎ Sovereign Battle Log</span>
-            <button class="btn" style="padding:4px 10px; font-size:0.72rem;" onclick="saveJournal()">Save Entry</button>
+        <div class="bond-panel">
+          <div class="bond-panel-header">
+            <span class="bond-panel-title">☯ Astrological Command Engine</span>
+            <span class="badge-007 gold">Lahiri Sidereal</span>
           </div>
-          <textarea class="journal-input" id="journal-text" placeholder="Log today's trade execution, SGS verification notes, mental state, and compliance milestones..."></textarea>
-          <div style="font-size:0.72rem; color:var(--text-muted); display:flex; justify-content:space-between;">
-            <span id="save-status">Saved in browser LocalStorage.</span>
-            <span id="last-saved-time"></span>
+          <div class="astro-grid">
+            <div class="astro-item">
+              <div class="planet">Saturn (Shani)</div>
+              <div class="pos">8H Natal • Transit 6H Pisces</div>
+              <div class="role">Yogakaraka Mahadasha Lord. Heavy extraction, zero-discrepancy compliance.</div>
+            </div>
+            <div class="astro-item">
+              <div class="planet">Mercury (Budha)</div>
+              <div class="pos">11H Leo (Magha) • Sub-Lord</div>
+              <div class="role">9th/12th Lord in 11H (Labha). Monetization of CIF trade and bank instruments.</div>
+            </div>
+            <div class="astro-item">
+              <div class="planet">Jupiter (Guru)</div>
+              <div class="pos">10H Cancer • Transit 11H Leo</div>
+              <div class="role">Exalted / Hamsa Yoga. State-level institutional authority and bank sign-offs.</div>
+            </div>
+            <div class="astro-item">
+              <div class="planet">Venus (Shukra)</div>
+              <div class="pos">12H Virgo (Debilitated)</div>
+              <div class="role">The Leak Vector: Bed dissipation. Transmuted via Brahmacharya into foreign scale.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bond-panel">
+          <div class="bond-panel-header">
+            <span class="bond-panel-title" style="color:#ff6b6b;">☠ 007 Perimeter Seals</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; font-size:0.75rem;">
+            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+              ✖ ZERO Social Feeds (Facebook Reels, IG, YouTube Shorts completely forbidden).
+            </div>
+            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+              ✖ ZERO Music / Audio Intoxication (Work in pure, cold acoustic silence).
+            </div>
+            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+              ✖ ZERO Phone in Bed or Bathroom (Air Gap strictly enforced on wooden desk).
+            </div>
+            <div style="padding:8px 10px; background:rgba(224,49,49,0.08); border-left:3px solid var(--bond-red); color:#ffb3b3;">
+              ✖ ZERO Daytime Lounging (Sleeping mat folded & locked in cupboard at wake-up).
+            </div>
           </div>
         </div>
 
       </div>
+
     </div>
 
     <footer>
-      SAMRAJYA SYSTEM • SATURN-MERCURY DASHA MONETIZATION PROTOCOL • GITHUB PAGES DEPLOYMENT READY
+      SAMRAJYA COMMAND • 007 EXECUTIVE PROTOCOL • PERSISTENT LOCALSTORAGE & GOOGLE DRIVE COMPATIBLE
     </footer>
+
   </div>
 
   <script>
     const dailyProtocols = [
-      { id: 'p1', title: '5:00 AM Biological Ignition', desc: 'Roll & stow mat in cupboard. Drink 2 glasses warm water with rock salt & ghee.' },
-      { id: 'p2', title: 'Empty-Hands Elimination', desc: 'Bowel evacuation with ZERO screens in bathroom. Downward Apana Vayu cleared.' },
-      { id: 'p3', title: 'Hydrotherapy Reset', desc: 'Unheated plain tap water wash over crown, brainstem, and pelvic floor.' },
-      { id: 'p4', title: 'Pranic Engine & Japa', desc: '15 min Anulom Vilom + Bandha vacuums followed by 108 silent Om Namah Shivaya Japa.' },
-      { id: 'p5', title: 'Physical Movement Calibration', desc: '30-40 slow flat-footed Baithaks + 25-30 deep Dand + brisk nasal walk.' },
-      { id: 'p6', title: 'Desk Air Gap Enforcement', desc: 'Smartphone docked on wooden desk, grayscale mode, face-down, out of arm reach.' },
-      { id: 'p7', title: 'Deep Work Block 1 (Document Audit)', desc: 'Silent audit of CIF sulfur shipping sets, SGS certificates, and B/L parameters.' },
-      { id: 'p8', title: 'Clean Fuel Nutrition', desc: 'Split-protein clean meals (boiled eggs, chuda bhaja/sattvic fuel); zero refined sugar.' },
-      { id: 'p9', title: '5:30 PM Sandhya Kaala Anchor', desc: '11 Audible repetitions of Hanuman Chalisa in low baritone to seal the evening.' },
-      { id: 'p10', title: '6:00 PM Digital Iron Curtain', desc: 'Phone shutdown/quarantine. Absolute elimination of reels, YouTube, and music.' }
+      { id: 't1', title: '05:00 AM Biological Ignition', desc: 'Mat folded & stowed in cupboard. Warm plain water sipped seated in Malasana.' },
+      { id: 't2', title: 'Empty-Hands Elimination', desc: 'Bowel evacuation with ZERO screens in bathroom. Downward Apana cleared.' },
+      { id: 't3', title: 'Unheated Tap Hydrotherapy', desc: 'Cold tap water poured over crown, brainstem, and pelvic floor.' },
+      { id: 't4', title: 'Pranic Engine & Sacred Lock', desc: '15m Anulom Vilom + Bandhas followed immediately by 108 Om Namah Shivaya Japa.' },
+      { id: 't5', title: 'Somatic Vessel Conditioning', desc: '30-40 flat-footed Baithaks + 25-30 deep Dand + brisk nasal walk.' },
+      { id: 't6', title: 'Desk Air Gap Enforcement', desc: 'Smartphone docked on wooden desk, grayscale mode, face-down, out of reach.' },
+      { id: 't7', title: 'Deep Work Block 1 (CIF Sulfur)', desc: 'Silent audit of 3/3 clean B/L drafts, SGS >= 99.5% purity, and 110% CIF insurance.' },
+      { id: 't8', title: 'Clean Fuel Nutrition', desc: 'Split-protein clean meals; zero refined sugars, zero seed oils, zero caffeine crashes.' },
+      { id: 't9', title: '05:30 PM Sandhya Kaala Anchor', desc: '11 Audible repetitions of Hanuman Chalisa in low baritone to seal the evening.' },
+      { id: 't10', title: '06:00 PM Digital Iron Curtain', desc: 'Hard phone shutdown/quarantine. Total elimination of reels, YouTube, and music.' }
     ];
 
-    const businessProtocols = [
-      { id: 'b1', title: 'Pre-Advice PDF Shipping Sets', desc: 'Verify 3/3 clean Bills of Lading, Commercial Invoices, and Packing Lists.' },
-      { id: 'b2', title: 'SGS / Saybolt Test Compliance', desc: 'Confirm purity >= 99.5%, moisture < 0.5%, mechanical granular specs.' },
-      { id: 'b3', title: 'Marine Insurance Endorsement', desc: 'Ensure 110% CIF value under Institute Cargo Clauses (A) in contract currency.' },
-      { id: 'b4', title: 'Advance Bank Clearance', desc: 'Send draft copies to issuing bank for pre-discrepancy vetting under UCP 600.' },
-      { id: 'b5', title: 'Customs & Port Manifest Synchronization', desc: 'Confirm IGM filed 48-72h prior to berthing; Delivery Order (DO) pre-cleared.' },
-      { id: 'b6', title: 'IMFPA / Banking Instrument Lock', desc: 'Irrevocable Fee Protection and MT752/MT754 acceptance advice tracking.' }
-    ];
+    const KEY_START_TIME = 'bond_sr_start_timestamp_v2';
+    const KEY_TODAY_TASKS = 'bond_tasks_completed_v2';
+    const KEY_HISTORY_DATA = 'bond_history_chart_v2';
 
-    const STORAGE_KEY_DAILY = 'samrajya_daily_tasks_v1';
-    const STORAGE_KEY_BIZ = 'samrajya_biz_tasks_v1';
-    const STORAGE_KEY_STREAK = 'samrajya_sr_streak_v1';
-    const STORAGE_KEY_JOURNAL = 'samrajya_journal_v1';
-    const STORAGE_KEY_JOURNAL_TIME = 'samrajya_journal_time_v1';
-
-    let dailyState = JSON.parse(localStorage.getItem(STORAGE_KEY_DAILY)) || {};
-    let bizState = JSON.parse(localStorage.getItem(STORAGE_KEY_BIZ)) || {};
-    let srStreak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK)) || 0;
-
-    function renderChecklist(containerId, items, stateObj, saveKey) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-
-      items.forEach(item => {
-        const isDone = !!stateObj[item.id];
-        const el = document.createElement('div');
-        el.className = `check-item ${isDone ? 'completed' : ''}`;
-        el.innerHTML = `
-          <div class="check-box"></div>
-          <div class="item-content">
-            <span class="item-text">${item.title}</span>
-            <span class="item-desc">${item.desc}</span>
-          </div>
-        `;
-        el.addEventListener('click', () => {
-          stateObj[item.id] = !stateObj[item.id];
-          localStorage.setItem(saveKey, JSON.stringify(stateObj));
-          renderAll();
-        });
-        container.appendChild(el);
-      });
+    let startTimestamp = localStorage.getItem(KEY_START_TIME);
+    if (!startTimestamp) {
+      startTimestamp = Date.now();
+      localStorage.setItem(KEY_START_TIME, startTimestamp);
+    } else {
+      startTimestamp = parseInt(startTimestamp);
     }
 
-    function calculateProgress() {
+    let todayTasks = JSON.parse(localStorage.getItem(KEY_TODAY_TASKS)) || {};
+    let chartHistory = JSON.parse(localStorage.getItem(KEY_HISTORY_DATA)) || [
+      { day: 'Day 1', score: 20 },
+      { day: 'Day 2', score: 40 },
+      { day: 'Day 3', score: 30 },
+      { day: 'Day 4', score: 60 },
+      { day: 'Day 5', score: 50 },
+      { day: 'Day 6', score: 70 },
+      { day: 'Day 7', score: 85 }
+    ];
+
+    let chartInstance = null;
+
+    function updateRealTimeCounter() {
+      const now = Date.now();
+      const elapsedMs = Math.max(0, now - startTimestamp);
+      const totalSeconds = Math.floor(elapsedMs / 1000);
+      const days = (totalSeconds / 86400).toFixed(2);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      document.getElementById('auto-streak-text').innerText = `${days} DAYS`;
+      document.getElementById('auto-time-detail').innerText = `${hours}h ${minutes}m ${seconds}s clean containment`;
+
+      updateBrainStatus(parseFloat(days));
+    }
+
+    setInterval(updateRealTimeCounter, 1000);
+
+    function resetTimerPrompt() {
+      if (confirm('Acknowledge reset and anchor new start timestamp to NOW?')) {
+        startTimestamp = Date.now();
+        localStorage.setItem(KEY_START_TIME, startTimestamp);
+        updateRealTimeCounter();
+      }
+    }
+
+    function updateBrainStatus(daysElapsed) {
+      let healPct = Math.min(100, Math.round((daysElapsed / 40) * 100));
+      healPct = Math.max(5, healPct);
+
+      document.getElementById('brain-heal-pct').innerText = `${healPct}%`;
+
+      const stage1 = document.getElementById('stage-card-1');
+      const stage2 = document.getElementById('stage-card-2');
+      const stage3 = document.getElementById('stage-card-3');
+      const pill = document.getElementById('brain-stage-pill');
+
+      stage1.classList.remove('active');
+      stage2.classList.remove('active');
+      stage3.classList.remove('active');
+
+      const pfcZone = document.getElementById('partPFC');
+      const striatumZone = document.getElementById('partStriatum');
+
+      if (daysElapsed < 10) {
+        stage1.classList.add('active');
+        pill.innerText = 'Phase 1: Stabilization';
+        document.getElementById('brain-heal-status').innerText = 'Phase 1: Vata Stabilization';
+        pfcZone.setAttribute('fill', 'rgba(34, 211, 238, 0.2)');
+        striatumZone.setAttribute('fill', 'rgba(197, 160, 89, 0.25)');
+        document.getElementById('stat-pfc').innerText = `${Math.min(30, Math.round(daysElapsed * 3))}% Healed`;
+        document.getElementById('stat-d2').innerText = `${Math.min(25, Math.round(daysElapsed * 2.5))}% Healed`;
+      } else if (daysElapsed < 25) {
+        stage2.classList.add('active');
+        pill.innerText = 'Phase 2: D2 Re-Sensitization';
+        document.getElementById('brain-heal-status').innerText = 'Phase 2: Receptor Upregulation';
+        pfcZone.setAttribute('fill', 'rgba(34, 211, 238, 0.45)');
+        striatumZone.setAttribute('fill', 'rgba(197, 160, 89, 0.5)');
+        document.getElementById('stat-pfc').innerText = `${Math.min(65, 30 + Math.round((daysElapsed - 10) * 2.3))}% Healed`;
+        document.getElementById('stat-d2').innerText = `${Math.min(60, 25 + Math.round((daysElapsed - 10) * 2.3))}% Healed`;
+      } else {
+        stage3.classList.add('active');
+        pill.innerText = 'Phase 3: Sovereign Ojas';
+        document.getElementById('brain-heal-status').innerText = 'Phase 3: Tejas & High Sovereign Will';
+        pfcZone.setAttribute('fill', 'rgba(34, 211, 238, 0.7)');
+        striatumZone.setAttribute('fill', 'rgba(197, 160, 89, 0.75)');
+        document.getElementById('stat-pfc').innerText = `${Math.min(100, 65 + Math.round((daysElapsed - 25) * 2.3))}% Sovereign`;
+        document.getElementById('stat-d2').innerText = `${Math.min(100, 60 + Math.round((daysElapsed - 25) * 2.6))}% Restored`;
+      }
+    }
+
+    function renderTasks() {
+      const list = document.getElementById('dailyProtocolsList');
+      list.innerHTML = '';
+
+      let count = 0;
+      dailyProtocols.forEach(p => {
+        const isDone = !!todayTasks[p.id];
+        if (isDone) count++;
+
+        const row = document.createElement('div');
+        row.className = `task-row ${isDone ? 'done' : ''}`;
+        row.innerHTML = `
+          <div class="task-checkbox"></div>
+          <div class="task-meta">
+            <span class="task-title">${p.title}</span>
+            <span class="task-desc">${p.desc}</span>
+          </div>
+        `;
+        row.addEventListener('click', () => {
+          todayTasks[p.id] = !todayTasks[p.id];
+          localStorage.setItem(KEY_TODAY_TASKS, JSON.stringify(todayTasks));
+          renderTasks();
+          updateProgressStats();
+        });
+        list.appendChild(row);
+      });
+
+      updateProgressStats();
+    }
+
+    function updateProgressStats() {
       const total = dailyProtocols.length;
       let completed = 0;
       dailyProtocols.forEach(p => {
-        if (dailyState[p.id]) completed++;
+        if (todayTasks[p.id]) completed++;
       });
 
       const pct = Math.round((completed / total) * 100);
-      document.getElementById('progress-text').innerText = `${pct}%`;
-      document.getElementById('progress-fill').style.width = `${pct}%`;
-      document.getElementById('compliance-pct').innerText = `${pct}%`;
-      document.getElementById('compliance-count').innerText = `${completed} / ${total} Tasks Locked`;
+      document.getElementById('tasks-pct').innerText = `${pct}%`;
+      document.getElementById('tasks-count').innerText = `${completed} of ${total} Protocols Locked`;
+      document.getElementById('progress-bar-fill').style.width = `${pct}%`;
     }
 
-    function renderStreak() {
-      document.getElementById('streak-num').innerText = srStreak;
-      document.getElementById('streak-counter').innerText = `${srStreak} DAYS`;
-    }
-
-    function updateStreak(delta) {
-      srStreak = Math.max(0, srStreak + delta);
-      localStorage.setItem(STORAGE_KEY_STREAK, srStreak);
-      renderStreak();
-    }
-
-    function resetStreak() {
-      if (confirm('Acknowledge relapse and reset Semen Retention counter to 0?')) {
-        srStreak = 0;
-        localStorage.setItem(STORAGE_KEY_STREAK, srStreak);
-        renderStreak();
+    function resetDayChecklist() {
+      if (confirm('Reset daily discipline checklist for today?')) {
+        todayTasks = {};
+        localStorage.setItem(KEY_TODAY_TASKS, JSON.stringify(todayTasks));
+        renderTasks();
       }
     }
 
-    function resetDailyChecklist() {
-      if (confirm('Reset all daily discipline checkboxes for today?')) {
-        dailyState = {};
-        localStorage.setItem(STORAGE_KEY_DAILY, JSON.stringify(dailyState));
-        renderAll();
-      }
+    function initChart() {
+      const ctx = document.getElementById('disciplineChart').getContext('2d');
+      const labels = chartHistory.map(item => item.day);
+      const data = chartHistory.map(item => item.score);
+
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Discipline & Neural Velocity (%)',
+            data: data,
+            borderColor: '#c5a059',
+            backgroundColor: 'rgba(197, 160, 89, 0.08)',
+            borderWidth: 2,
+            tension: 0.35,
+            fill: true,
+            pointBackgroundColor: '#22d3ee',
+            pointBorderColor: '#0b0c10',
+            pointRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              min: 0,
+              max: 100,
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+            },
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
     }
 
-    function saveJournal() {
-      const text = document.getElementById('journal-text').value;
-      const now = new Date().toLocaleString();
-      localStorage.setItem(STORAGE_KEY_JOURNAL, text);
-      localStorage.setItem(STORAGE_KEY_JOURNAL_TIME, now);
-      
-      const statusEl = document.getElementById('save-status');
-      statusEl.innerText = 'All changes saved locally!';
-      statusEl.style.color = '#10b981';
-      document.getElementById('last-saved-time').innerText = `Last saved: ${now}`;
+    function recordDailyLog() {
+      const total = dailyProtocols.length;
+      let completed = 0;
+      dailyProtocols.forEach(p => { if (todayTasks[p.id]) completed++; });
+      const currentScore = Math.round((completed / total) * 100);
 
-      setTimeout(() => {
-        statusEl.innerText = 'Saved in browser LocalStorage.';
-        statusEl.style.color = '#94a3b8';
-      }, 2500);
+      const nextDayLabel = `D${chartHistory.length + 1}`;
+      chartHistory.push({ day: nextDayLabel, score: currentScore });
+      if (chartHistory.length > 14) chartHistory.shift();
+
+      localStorage.setItem(KEY_HISTORY_DATA, JSON.stringify(chartHistory));
+      chartInstance.data.labels = chartHistory.map(item => item.day);
+      chartInstance.data.datasets[0].data = chartHistory.map(item => item.score);
+      chartInstance.update();
+      alert(`Today's execution score (${currentScore}%) logged onto the tactical chart!`);
     }
 
-    function loadJournal() {
-      const savedText = localStorage.getItem(STORAGE_KEY_JOURNAL);
-      const savedTime = localStorage.getItem(STORAGE_KEY_JOURNAL_TIME);
-      if (savedText) {
-        document.getElementById('journal-text').value = savedText;
-      }
-      if (savedTime) {
-        document.getElementById('last-saved-time').innerText = `Last saved: ${savedTime}`;
-      }
+    function exportDataForDrive() {
+      const exportObject = {
+        app: 'Samrajya_007_Command_Center',
+        export_date: new Date().toISOString(),
+        startTimestamp: startTimestamp,
+        todayTasks: todayTasks,
+        chartHistory: chartHistory
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObject, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `SAMRAJYA_BACKUP_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      alert("Backup JSON file generated! Save this file directly into your Google Drive folder for safe keeping.");
     }
 
-    function renderAll() {
-      renderChecklist('daily-checklist', dailyProtocols, dailyState, STORAGE_KEY_DAILY);
-      renderChecklist('business-checklist', businessProtocols, bizState, STORAGE_KEY_BIZ);
-      calculateProgress();
-      renderStreak();
+    function importDataFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (imported.startTimestamp) {
+            startTimestamp = imported.startTimestamp;
+            localStorage.setItem(KEY_START_TIME, startTimestamp);
+          }
+          if (imported.todayTasks) {
+            todayTasks = imported.todayTasks;
+            localStorage.setItem(KEY_TODAY_TASKS, JSON.stringify(todayTasks));
+          }
+          if (imported.chartHistory) {
+            chartHistory = imported.chartHistory;
+            localStorage.setItem(KEY_HISTORY_DATA, JSON.stringify(chartHistory));
+          }
+          renderTasks();
+          updateRealTimeCounter();
+          if (chartInstance) {
+            chartInstance.data.labels = chartHistory.map(item => item.day);
+            chartInstance.data.datasets[0].data = chartHistory.map(item => item.score);
+            chartInstance.update();
+          }
+          alert("Successfully restored command center data from file!");
+        } catch (err) {
+          alert("Invalid backup JSON file.");
+        }
+      };
+      reader.readAsText(file);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      renderAll();
-      loadJournal();
+      renderTasks();
+      updateRealTimeCounter();
+      initChart();
     });
   </script>
 </body>
