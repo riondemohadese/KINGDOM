@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMRAJYA WAR MAP // SOVEREIGN COMMAND CENTER</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #07090e;
+      --bg-card: rgba(15, 20, 31, 0.85);
+      --bg-card-hover: rgba(22, 30, 48, 0.95);
+      --gold: #d4af37;
+      --gold-dim: #8c7322;
+      --gold-glow: rgba(212, 175, 55, 0.25);
+      --accent-red: #c0392b;
+      --accent-cyan: #00d2d3;
+      --text-main: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(212, 175, 55, 0.2);
+      --border-bright: rgba(212, 175, 55, 0.5);
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, rgba(7, 9, 14, 0.95), rgba(7, 9, 14, 0.98));
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      padding: 24px 16px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      padding: 28px 24px;
+      border-radius: 8px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 24px var(--gold-glow);
+    }
+
+    header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+
+    .badge.red {
+      border-color: var(--accent-red);
+      color: #ff6b6b;
+    }
+
+    .badge.cyan {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    .col-12 { grid-column: span 12; }
+    .col-6 { grid-column: span 6; }
+
+    @media (max-width: 992px) {
+      .col-6 { grid-column: span 12; }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--border-bright);
+      background: var(--bg-card-hover);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .target-banner {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(192, 57, 43, 0.12) 100%);
+      border: 1px solid var(--border-bright);
+      padding: 20px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .stat-item .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .stat-item .val {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+    }
+
+    .stat-item .sub {
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+    }
+
+    .astro-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+    }
+
+    .astro-table th, .astro-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: left;
+    }
+
+    .astro-table th {
+      color: var(--gold);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .astro-table td.highlight {
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .check-item:hover {
+      border-color: var(--gold-dim);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .check-item.completed {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .check-item.completed .item-text {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .check-box {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--gold);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+      transition: background 0.2s;
+    }
+
+    .check-item.completed .check-box {
+      background: var(--gold);
+    }
+
+    .check-box::after {
+      content: '✔';
+      font-size: 11px;
+      color: #000;
+      display: none;
+      font-weight: bold;
+    }
+
+    .check-item.completed .check-box::after {
+      display: block;
+    }
+
+    .item-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .item-text {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .item-desc {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn:hover {
+      background: var(--gold);
+      color: #000;
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    .btn-danger {
+      border-color: var(--accent-red);
+      color: #ff6b6b;
+    }
+
+    .btn-danger:hover {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    .counter-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 18px;
+    }
+
+    .counter-display {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      font-weight: bold;
+    }
+
+    .counter-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .journal-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      padding: 12px;
+      border-radius: 6px;
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .journal-input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .prohibitions-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.82rem;
+    }
+
+    .prohibitions-list li {
+      padding: 8px 12px;
+      background: rgba(192, 57, 43, 0.08);
+      border-left: 3px solid var(--accent-red);
+      color: #fca5a5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 1.5px;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>SAMRAJYA WAR MAP // 2026</h1>
+      <p>Sovereign Operational Matrix & Daily Discipline Command Center</p>
+      <div class="badge-bar">
+        <span class="badge">ASC & MOON: LIBRA (SWATI)</span>
+        <span class="badge">MAHADASHA: SATURN - MERCURY (11H LABHA)</span>
+        <span class="badge red">AIR GAP PROTOCOL: ACTIVE</span>
+        <span class="badge cyan">MONTHLY TARGET: $1,000,000 MONETIZATION</span>
+      </div>
+    </header>
+
+    <div class="target-banner">
+      <div class="stat-item">
+        <div class="label">Primary Monthly Objective</div>
+        <div class="val">$1,000,000</div>
+        <div class="sub">November 2026 CIF Sulfur Monetization</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Semen Retention (Brahmacharya)</div>
+        <div class="val" id="streak-counter">0 DAYS</div>
+        <div class="sub">Transmutation: Shukra → Ojas → Tejas</div>
+      </div>
+      <div class="stat-item">
+        <div class="label">Today's Discipline Completion</div>
+        <div class="val" id="compliance-pct">0%</div>
+        <div class="sub" id="compliance-count">0 / 0 Tasks Locked</div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- COLUMN LEFT -->
+      <div class="col-6" style="display:flex; flex-direction:column; gap:20px;">
+        
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">☯ Sidereal Planetary Engine</span>
+            <span class="badge">Lahiri Ayanamsha</span>
+          </div>
+          <table class="astro-table">
+            <thead>
+              <tr>
+                <th>Planet / Graha</th>
+                <th>House / Rashi</th>
+                <th>Status & Operational Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="highlight">Saturn (Shani)</td>
+                <td>8H Taurus (Rohini) → Transit 6H Pisces</td>
+                <td>Yogakaraka Mahadasha Lord. Heavy extraction, sulfur liquidation, legal compliance.</td>
+              </tr>
+              <tr>
+                <td class="highlight">Mercury (Budha)</td>
+                <td>11H Leo (Magha) • Dasha Sub-Lord</td>
+                <td>9th/12th Lord in 11H (Labha). Monetization of CIF shipping & banking instruments.</td>
+              </tr>
+              <tr>
+                <td class="highlight">Jupiter (Guru)</td>
+                <td>10H Cancer (Pushya) → Transit 11H Leo</td>
+                <td>Hamsa Yoga / Exalted. State-level sovereign scale & banking acceptance.</td>
+              </tr>
+              <tr>
+                <td class="highlight">Mars (Kuja)</td>
+                <td>10H Cancer (Neechabhanga)</td>
+                <td>Tactical friction transmuted into relentless commercial execution.</td>
+              </tr>
+              <tr>
+                <td class="highlight">Venus (Shukra)</td>
+                <td>12H Virgo (Debilitated)</td>
+                <td>The Leak Vector: Bed comforts & isolation escapism. Transmuted via Urdhvaretas.</td>
+              </tr>
+              <tr>
+                <td class="highlight">Rahu & Ketu</td>
+                <td>8H Taurus / 2H Scorpio • Ketu in 11H</td>
+                <td>Ketu over 11H Mercury filters broker noise; demands verified signatories only.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚖ November CIF Sulfur Checklist</span>
+            <span class="badge cyan">UCP 600 Compliance</span>
+          </div>
+          <p style="font-size:0.78rem; color:var(--text-muted);">
+            Direct execution pipeline to force $1,000,000 cash settlement via Letter of Credit & clean document liquidation:
+          </p>
+          <div class="checklist" id="business-checklist"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title" style="color:#ff6b6b;">☠ Non-Negotiable Perimeter Seals</span>
+            <span class="badge red">Strict Elimination</span>
+          </div>
+          <ul class="prohibitions-list">
+            <li>✖ ZERO Social Media Feeds (Facebook Reels, Instagram Reels, YouTube Shorts).</li>
+            <li>✖ ZERO Lyrical / Dramatic Music (Spotify closed; absolute silence at desk).</li>
+            <li>✖ ZERO Phone in Bed or Bathroom (Enforce Air Gap & Wooden Desk Docking).</li>
+            <li>✖ ZERO Intermediary Daisy-Chains (Verified signatories & bank SWIFT lines only).</li>
+            <li>✖ ZERO Daytime Lounging (Sleeping mat stowed in cupboard upon waking).</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- COLUMN RIGHT -->
+      <div class="col-6" style="display:flex; flex-direction:column; gap:20px;">
+        
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">⚔ Brahmacharya Counter</span>
+            <span class="badge">Vitality Engine</span>
+          </div>
+          <div class="counter-box">
+            <div>
+              <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Current Clean Streak</div>
+              <div class="counter-display" id="streak-num">0</div>
+              <div style="font-size:0.75rem; color:var(--gold);">Consecutive Days Contained</div>
+            </div>
+            <div class="counter-actions">
+              <button class="btn" onclick="updateStreak(1)">+1 Day</button>
+              <button class="btn" onclick="updateStreak(-1)">-1</button>
+              <button class="btn btn-danger" onclick="resetStreak()">Reset</button>
+            </div>
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted);">
+            Biological Timeline: Days 1-10 (Withdrawal/Vata calm) • Days 11-20 (Pelvic Heat/Androgen binding) • Days 21-40 (Ojas & Tejas crystallization).
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">☑ Daily Discipline Protocols</span>
+            <button class="btn" style="padding:4px 10px; font-size:0.72rem;" onclick="resetDailyChecklist()">Reset Today</button>
+          </div>
+          
+          <div>
+            <div style="display:flex; justify-content:space-between; font-size:0.78rem;">
+              <span>Daily Protocol Adherence</span>
+              <span id="progress-text" style="color:var(--gold);">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="progress-fill"></div>
+            </div>
+          </div>
+
+          <div class="checklist" id="daily-checklist"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">✎ Sovereign Battle Log</span>
+            <button class="btn" style="padding:4px 10px; font-size:0.72rem;" onclick="saveJournal()">Save Entry</button>
+          </div>
+          <textarea class="journal-input" id="journal-text" placeholder="Log today's trade execution, SGS verification notes, mental state, and compliance milestones..."></textarea>
+          <div style="font-size:0.72rem; color:var(--text-muted); display:flex; justify-content:space-between;">
+            <span id="save-status">Saved in browser LocalStorage.</span>
+            <span id="last-saved-time"></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer>
+      SAMRAJYA SYSTEM • SATURN-MERCURY DASHA MONETIZATION PROTOCOL • GITHUB PAGES DEPLOYMENT READY
+    </footer>
+  </div>
+
+  <script>
+    const dailyProtocols = [
+      { id: 'p1', title: '5:00 AM Biological Ignition', desc: 'Roll & stow mat in cupboard. Drink 2 glasses warm water with rock salt & ghee.' },
+      { id: 'p2', title: 'Empty-Hands Elimination', desc: 'Bowel evacuation with ZERO screens in bathroom. Downward Apana Vayu cleared.' },
+      { id: 'p3', title: 'Hydrotherapy Reset', desc: 'Unheated plain tap water wash over crown, brainstem, and pelvic floor.' },
+      { id: 'p4', title: 'Pranic Engine & Japa', desc: '15 min Anulom Vilom + Bandha vacuums followed by 108 silent Om Namah Shivaya Japa.' },
+      { id: 'p5', title: 'Physical Movement Calibration', desc: '30-40 slow flat-footed Baithaks + 25-30 deep Dand + brisk nasal walk.' },
+      { id: 'p6', title: 'Desk Air Gap Enforcement', desc: 'Smartphone docked on wooden desk, grayscale mode, face-down, out of arm reach.' },
+      { id: 'p7', title: 'Deep Work Block 1 (Document Audit)', desc: 'Silent audit of CIF sulfur shipping sets, SGS certificates, and B/L parameters.' },
+      { id: 'p8', title: 'Clean Fuel Nutrition', desc: 'Split-protein clean meals (boiled eggs, chuda bhaja/sattvic fuel); zero refined sugar.' },
+      { id: 'p9', title: '5:30 PM Sandhya Kaala Anchor', desc: '11 Audible repetitions of Hanuman Chalisa in low baritone to seal the evening.' },
+      { id: 'p10', title: '6:00 PM Digital Iron Curtain', desc: 'Phone shutdown/quarantine. Absolute elimination of reels, YouTube, and music.' }
+    ];
+
+    const businessProtocols = [
+      { id: 'b1', title: 'Pre-Advice PDF Shipping Sets', desc: 'Verify 3/3 clean Bills of Lading, Commercial Invoices, and Packing Lists.' },
+      { id: 'b2', title: 'SGS / Saybolt Test Compliance', desc: 'Confirm purity >= 99.5%, moisture < 0.5%, mechanical granular specs.' },
+      { id: 'b3', title: 'Marine Insurance Endorsement', desc: 'Ensure 110% CIF value under Institute Cargo Clauses (A) in contract currency.' },
+      { id: 'b4', title: 'Advance Bank Clearance', desc: 'Send draft copies to issuing bank for pre-discrepancy vetting under UCP 600.' },
+      { id: 'b5', title: 'Customs & Port Manifest Synchronization', desc: 'Confirm IGM filed 48-72h prior to berthing; Delivery Order (DO) pre-cleared.' },
+      { id: 'b6', title: 'IMFPA / Banking Instrument Lock', desc: 'Irrevocable Fee Protection and MT752/MT754 acceptance advice tracking.' }
+    ];
+
+    const STORAGE_KEY_DAILY = 'samrajya_daily_tasks_v1';
+    const STORAGE_KEY_BIZ = 'samrajya_biz_tasks_v1';
+    const STORAGE_KEY_STREAK = 'samrajya_sr_streak_v1';
+    const STORAGE_KEY_JOURNAL = 'samrajya_journal_v1';
+    const STORAGE_KEY_JOURNAL_TIME = 'samrajya_journal_time_v1';
+
+    let dailyState = JSON.parse(localStorage.getItem(STORAGE_KEY_DAILY)) || {};
+    let bizState = JSON.parse(localStorage.getItem(STORAGE_KEY_BIZ)) || {};
+    let srStreak = parseInt(localStorage.getItem(STORAGE_KEY_STREAK)) || 0;
+
+    function renderChecklist(containerId, items, stateObj, saveKey) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      items.forEach(item => {
+        const isDone = !!stateObj[item.id];
+        const el = document.createElement('div');
+        el.className = `check-item ${isDone ? 'completed' : ''}`;
+        el.innerHTML = `
+          <div class="check-box"></div>
+          <div class="item-content">
+            <span class="item-text">${item.title}</span>
+            <span class="item-desc">${item.desc}</span>
+          </div>
+        `;
+        el.addEventListener('click', () => {
+          stateObj[item.id] = !stateObj[item.id];
+          localStorage.setItem(saveKey, JSON.stringify(stateObj));
+          renderAll();
+        });
+        container.appendChild(el);
+      });
+    }
+
+    function calculateProgress() {
+      const total = dailyProtocols.length;
+      let completed = 0;
+      dailyProtocols.forEach(p => {
+        if (dailyState[p.id]) completed++;
+      });
+
+      const pct = Math.round((completed / total) * 100);
+      document.getElementById('progress-text').innerText = `${pct}%`;
+      document.getElementById('progress-fill').style.width = `${pct}%`;
+      document.getElementById('compliance-pct').innerText = `${pct}%`;
+      document.getElementById('compliance-count').innerText = `${completed} / ${total} Tasks Locked`;
+    }
+
+    function renderStreak() {
+      document.getElementById('streak-num').innerText = srStreak;
+      document.getElementById('streak-counter').innerText = `${srStreak} DAYS`;
+    }
+
+    function updateStreak(delta) {
+      srStreak = Math.max(0, srStreak + delta);
+      localStorage.setItem(STORAGE_KEY_STREAK, srStreak);
+      renderStreak();
+    }
+
+    function resetStreak() {
+      if (confirm('Acknowledge relapse and reset Semen Retention counter to 0?')) {
+        srStreak = 0;
+        localStorage.setItem(STORAGE_KEY_STREAK, srStreak);
+        renderStreak();
+      }
+    }
+
+    function resetDailyChecklist() {
+      if (confirm('Reset all daily discipline checkboxes for today?')) {
+        dailyState = {};
+        localStorage.setItem(STORAGE_KEY_DAILY, JSON.stringify(dailyState));
+        renderAll();
+      }
+    }
+
+    function saveJournal() {
+      const text = document.getElementById('journal-text').value;
+      const now = new Date().toLocaleString();
+      localStorage.setItem(STORAGE_KEY_JOURNAL, text);
+      localStorage.setItem(STORAGE_KEY_JOURNAL_TIME, now);
+      
+      const statusEl = document.getElementById('save-status');
+      statusEl.innerText = 'All changes saved locally!';
+      statusEl.style.color = '#10b981';
+      document.getElementById('last-saved-time').innerText = `Last saved: ${now}`;
+
+      setTimeout(() => {
+        statusEl.innerText = 'Saved in browser LocalStorage.';
+        statusEl.style.color = '#94a3b8';
+      }, 2500);
+    }
+
+    function loadJournal() {
+      const savedText = localStorage.getItem(STORAGE_KEY_JOURNAL);
+      const savedTime = localStorage.getItem(STORAGE_KEY_JOURNAL_TIME);
+      if (savedText) {
+        document.getElementById('journal-text').value = savedText;
+      }
+      if (savedTime) {
+        document.getElementById('last-saved-time').innerText = `Last saved: ${savedTime}`;
+      }
+    }
+
+    function renderAll() {
+      renderChecklist('daily-checklist', dailyProtocols, dailyState, STORAGE_KEY_DAILY);
+      renderChecklist('business-checklist', businessProtocols, bizState, STORAGE_KEY_BIZ);
+      calculateProgress();
+      renderStreak();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAll();
+      loadJournal();
+    });
+  </script>
+</body>
+</html>
