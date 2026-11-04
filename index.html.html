@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090b0d">
+  <meta name="description" content="SAMRAJYA 007 — a private executive discipline and command dashboard.">
+  <title>SAMRAJYA 007 | Sovereign Command</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --bg: #090b0d;
+      --surface: #101316;
+      --surface-2: #151a1e;
+      --surface-3: #1a2024;
+      --line: rgba(222, 201, 158, .14);
+      --line-strong: rgba(222, 201, 158, .28);
+      --gold: #c8a96b;
+      --gold-bright: #e4c98e;
+      --gold-dim: #80683e;
+      --text: #f1eee7;
+      --muted: #969b9c;
+      --faint: #62696b;
+      --cyan: #79c8d2;
+      --red: #d17c78;
+      --green: #8bc6a6;
+      --radius: 15px;
+      --shadow: 0 18px 55px rgba(0,0,0,.24);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh; padding: 28px;
+      background:
+        radial-gradient(ellipse at 12% 0%, rgba(200,169,107,.09), transparent 34%),
+        radial-gradient(ellipse at 90% 18%, rgba(121,200,210,.045), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: Manrope, system-ui, sans-serif;
+      line-height: 1.55;
+    }
+    button { font: inherit; }
+    .shell { width: min(1500px, 100%); margin: 0 auto; display: grid; gap: 20px; }
+    .mono, .eyebrow, .metric-label, .tag, .section-kicker, .time-detail, .footer {
+      font-family: "DM Mono", monospace;
+    }
+    .topbar {
+      position: relative; overflow: hidden; display: flex; align-items: center;
+      justify-content: space-between; gap: 24px; flex-wrap: wrap;
+      padding: 28px 32px; border: 1px solid var(--line-strong);
+      border-radius: var(--radius);
+      background: linear-gradient(115deg, rgba(25,29,31,.98), rgba(12,15,17,.98));
+      box-shadow: var(--shadow);
+    }
+    .topbar::before {
+      content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+      background: linear-gradient(180deg, transparent, var(--gold), transparent);
+    }
+    .brand-lockup { display: flex; align-items: center; gap: 18px; }
+    .crest {
+      width: 54px; height: 54px; flex: 0 0 auto; display: grid; place-items: center;
+      border: 1px solid var(--line-strong); border-radius: 50%;
+      color: var(--gold-bright); font: 600 16px "DM Mono", monospace;
+      letter-spacing: -2px; box-shadow: inset 0 0 24px rgba(200,169,107,.08);
+    }
+    .eyebrow { color: var(--gold); font-size: 10px; letter-spacing: .24em; text-transform: uppercase; }
+    h1 {
+      margin: 3px 0 2px; font: 600 clamp(23px, 3vw, 34px)/1.15 "Playfair Display", Georgia, serif;
+      letter-spacing: .035em;
+    }
+    .subtitle { margin: 0; color: var(--muted); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    .top-tags { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .tag {
+      padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px;
+      color: #c8ccca; background: rgba(255,255,255,.018);
+      font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .tag.gold { color: var(--gold-bright); border-color: var(--line-strong); }
+    .tag.cyan { color: var(--cyan); border-color: rgba(121,200,210,.25); }
+    .tag.red { color: var(--red); border-color: rgba(209,124,120,.25); }
+
+    .metrics { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+    .metric, .panel {
+      border: 1px solid var(--line); border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(20,24,27,.98), rgba(13,16,18,.98));
+      box-shadow: var(--shadow);
+    }
+    .metric { padding: 20px 21px; min-height: 135px; position: relative; overflow: hidden; }
+    .metric::after {
+      content: ""; position: absolute; width: 100px; height: 100px; right: -45px; bottom: -60px;
+      border: 1px solid rgba(200,169,107,.12); border-radius: 50%;
+      box-shadow: 0 0 0 12px rgba(200,169,107,.025), 0 0 0 25px rgba(200,169,107,.018);
+    }
+    .metric-label { color: var(--muted); font-size: 9px; letter-spacing: .16em; text-transform: uppercase; }
+    .metric-value { margin: 11px 0 4px; color: var(--text); font-size: clamp(23px, 2.4vw, 32px); font-weight: 700; letter-spacing: -.045em; }
+    .metric-value.gold { color: var(--gold-bright); }
+    .metric-value.cyan { color: var(--cyan); }
+    .metric-sub { color: var(--faint); font-size: 10px; }
+
+    .layout { display: grid; grid-template-columns: minmax(0, 1.38fr) minmax(340px, .92fr); gap: 20px; align-items: start; }
+    .stack { display: grid; gap: 20px; min-width: 0; }
+    .panel { padding: 23px; min-width: 0; }
+    .panel-head {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+      padding-bottom: 15px; margin-bottom: 16px; border-bottom: 1px solid var(--line);
+    }
+    .panel-title { margin: 0; font: 600 19px/1.25 "Playfair Display", Georgia, serif; letter-spacing: .015em; }
+    .section-kicker { margin-bottom: 5px; color: var(--gold); font-size: 9px; letter-spacing: .19em; text-transform: uppercase; }
+    .panel-note { margin: -4px 0 15px; max-width: 850px; color: var(--muted); font-size: 11px; }
+    .sync { color: var(--gold-bright); font: 9px "DM Mono", monospace; letter-spacing: .08em; text-align: right; }
+
+    .chart-wrap {
+      padding: 16px 14px 10px; border: 1px solid var(--line);
+      border-radius: 11px; background: rgba(0,0,0,.16);
+    }
+    .legend { display: flex; flex-wrap: wrap; gap: 14px 20px; margin-bottom: 10px; color: var(--muted); font: 9px "DM Mono", monospace; }
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .swatch { display: inline-block; width: 17px; height: 2px; background: var(--gold); }
+    .swatch.cyan { background: var(--cyan); }
+    #recoverySvg { display: block; width: 100%; height: auto; overflow: visible; }
+    .chart-caption { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--faint); font-size: 9px; margin-top: 5px; }
+
+    .stages { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; margin-bottom: 14px; }
+    .stage {
+      padding: 13px; border: 1px solid var(--line); border-radius: 10px;
+      background: rgba(255,255,255,.015); transition: border-color .2s, background .2s;
+    }
+    .stage.active { border-color: rgba(121,200,210,.55); background: rgba(121,200,210,.055); }
+    .stage-no { color: var(--cyan); font: 10px "DM Mono", monospace; letter-spacing: .1em; }
+    .stage p { margin: 6px 0 0; color: var(--muted); font-size: 10px; }
+    .brain-wrap {
+      padding: 16px; border: 1px solid var(--line); border-radius: 11px;
+      background: radial-gradient(ellipse at 50% 45%, rgba(121,200,210,.045), transparent 60%), #0c0f11;
+    }
+    .brain-graphic { display: block; width: min(100%, 390px); height: auto; margin: 0 auto 12px; }
+    .brain-details { display: grid; grid-template-columns: repeat(2,1fr); gap: 9px; }
+    .detail {
+      padding: 12px; border: 1px solid var(--line); border-left: 2px solid var(--gold);
+      border-radius: 7px; background: rgba(255,255,255,.018);
+    }
+    .detail h3 { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 5px; font-size: 10px; }
+    .detail h3 span { color: var(--gold-bright); white-space: nowrap; font: 9px "DM Mono", monospace; }
+    .detail p { margin: 0; color: var(--muted); font-size: 9px; }
+
+    .progress-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--muted); font: 9px "DM Mono", monospace; }
+    .progress-track { height: 5px; overflow: hidden; border-radius: 20px; background: #252a2c; margin-bottom: 14px; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright)); transition: width .25s ease; }
+    .tasks { display: grid; gap: 7px; }
+    .task {
+      display: flex; align-items: flex-start; gap: 11px; padding: 11px 12px;
+      border: 1px solid transparent; border-radius: 9px; background: rgba(255,255,255,.025);
+      cursor: pointer; transition: .2s;
+    }
+    .task:hover { border-color: var(--line-strong); background: rgba(255,255,255,.04); }
+    .task.done { border-color: rgba(139,198,166,.2); background: rgba(139,198,166,.045); }
+    .check {
+      width: 17px; height: 17px; flex: 0 0 auto; margin-top: 2px; display: grid; place-items: center;
+      border: 1px solid var(--gold-dim); border-radius: 5px; color: #101316; font-size: 11px;
+    }
+    .task.done .check { background: var(--green); border-color: var(--green); }
+    .task-title { display: block; color: var(--text); font-size: 10px; font-weight: 700; }
+    .task-desc { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .task.done .task-title { color: #a4b5aa; text-decoration: line-through; }
+    .btn {
+      border: 1px solid var(--line-strong); border-radius: 7px; padding: 8px 11px;
+      color: var(--gold-bright); background: transparent; cursor: pointer;
+      font: 9px "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase;
+      transition: .2s;
+    }
+    .btn:hover { background: rgba(200,169,107,.09); border-color: var(--gold); }
+    .btn:focus-visible, .task:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 3px; }
+
+    .astro-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 9px; }
+    .astro-item { padding: 13px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.018); }
+    .planet { color: var(--gold-bright); font: 11px "DM Mono", monospace; }
+    .position { margin-top: 5px; color: var(--cyan); font-size: 9px; }
+    .astro-role { margin-top: 7px; color: var(--muted); font-size: 9px; }
+    .seals { display: grid; gap: 8px; }
+    .seal {
+      padding: 11px 12px; border: 1px solid rgba(209,124,120,.13);
+      border-left: 2px solid var(--red); border-radius: 7px;
+      background: rgba(209,124,120,.035); color: #d6aaa6; font-size: 10px;
+    }
+    .seal strong { color: var(--red); font: 10px "DM Mono", monospace; }
+    .disclaimer { margin: 14px 0 0; color: var(--faint); font-size: 9px; line-height: 1.6; }
+    .footer {
+      padding: 18px 10px 4px; border-top: 1px solid var(--line);
+      color: var(--faint); text-align: center; font-size: 9px; letter-spacing: .16em;
+    }
+
+    @media (max-width: 1050px) {
+      body { padding: 18px; }
+      .layout { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 620px) {
+      body { padding: 11px; }
+      .topbar { padding: 21px 18px; }
+      .brand-lockup { align-items: flex-start; }
+      .crest { width: 43px; height: 43px; font-size: 13px; }
+      .top-tags { justify-content: flex-start; }
+      .metrics { gap: 9px; }
+      .metric { padding: 15px; min-height: 116px; }
+      .metric-value { font-size: 23px; }
+      .panel { padding: 17px; }
+      .stages { grid-template-columns: 1fr; }
+      .brain-details, .astro-grid { grid-template-columns: 1fr; }
+      .panel-head { align-items: flex-start; }
+      .sync { max-width: 115px; line-height: 1.5; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="crest" aria-hidden="true">007</div>
+        <div>
+          <div class="eyebrow">Private executive interface</div>
+          <h1>SAMRAJYA <span style="color:var(--gold)">/</span> 007</h1>
+          <p class="subtitle">Sovereign Command Centre · November 2026</p>
+        </div>
+      </div>
+      <div class="top-tags" aria-label="System status">
+        <span class="tag">Stealth matrix</span>
+        <span class="tag gold">Saturn · Mercury</span>
+        <span class="tag red">Air gap active</span>
+        <span class="tag cyan">Target · $1M CIF</span>
+      </div>
+    </header>
+
+    <section class="metrics" aria-label="Command metrics">
+      <article class="metric">
+        <div class="metric-label">Elapsed discipline clock</div>
+        <div class="metric-value gold" id="streak">0.00 DAYS</div>
+        <div class="metric-sub time-detail" id="clock-detail">Anchored · 04 Nov 2026 · 00:00 IST</div>
+      </article>
+      <article class="metric">
+        <div class="metric-label">Primary commercial objective</div>
+        <div class="metric-value">$1,000,000</div>
+        <div class="metric-sub">CIF sulphur · target settlement</div>
+      </article>
+      <article class="metric">
+        <div class="metric-label">Ojas discipline index</div>
+        <div class="metric-value gold" id="ojas-value">10%</div>
+        <div class="metric-sub">Illustrative progression model</div>
+      </article>
+      <article class="metric">
+        <div class="metric-label">Bhagya symbolic index</div>
+        <div class="metric-value cyan" id="luck-value">15%</div>
+        <div class="metric-sub">Personal symbolic framework</div>
+      </article>
+    </section>
+
+    <section class="layout">
+      <div class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="section-kicker">01 / Performance telemetry</div>
+              <h2 class="panel-title">Ojas &amp; Bhagya Progression</h2>
+            </div>
+            <div class="sync" id="sync-tag">LIVE · 1 SECOND</div>
+          </div>
+          <p class="panel-note">A visual representation of the personal progression curves configured in this dashboard. These indices are symbolic tracking values—not clinical measurements, biological predictions, or guarantees of luck or outcomes.</p>
+          <div class="chart-wrap">
+            <div class="legend">
+              <span><i class="swatch"></i> Ojas index</span>
+              <span><i class="swatch cyan"></i> Bhagya index</span>
+              <span id="marker-label" style="margin-left:auto;color:var(--gold-bright)">Current position</span>
+            </div>
+            <svg id="recoverySvg" viewBox="0 0 600 245" role="img" aria-label="Illustrative progression chart from day zero to day forty">
+              <defs>
+                <linearGradient id="ojasFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#c8a96b" stop-opacity=".25"/>
+                  <stop offset="100%" stop-color="#c8a96b" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g id="chartGrid"></g>
+              <path id="ojasArea" fill="url(#ojasFill)"></path>
+              <path id="ojasLine" fill="none" stroke="#c8a96b" stroke-width="2.7" stroke-linecap="round"></path>
+              <path id="luckLine" fill="none" stroke="#79c8d2" stroke-width="2.2" stroke-dasharray="6 5" stroke-linecap="round"></path>
+              <line id="markerLine" y1="20" y2="205" stroke="#eee" stroke-opacity=".35" stroke-dasharray="3 4"></line>
+              <circle id="ojasDot" r="5" fill="#e4c98e" stroke="#101316" stroke-width="2"></circle>
+              <circle id="luckDot" r="5" fill="#79c8d2" stroke="#101316" stroke-width="2"></circle>
+            </svg>
+            <div class="chart-caption"><span>MODEL WINDOW · 40 DAYS</span><span>VALUES CLAMPED · 0–100%</span></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="section-kicker">02 / Personal development</div>
+              <h2 class="panel-title">Neuro-Discipline Milestones</h2>
+            </div>
+            <span class="tag cyan" id="phase-pill">Phase 1 · Foundation</span>
+          </div>
+          <p class="panel-note">Milestone labels are a motivational framework, not a diagnosis or a measured account of brain recovery. Individual experiences and timelines vary.</p>
+          <div class="stages">
+            <article class="stage" id="stage-1">
+              <div class="stage-no">PHASE 01 · DAYS 1–10</div>
+              <p>Stabilise routines, reduce digital stimulation and establish consistent daily structure.</p>
+            </article>
+            <article class="stage" id="stage-2">
+              <div class="stage-no">PHASE 02 · DAYS 11–25</div>
+              <p>Strengthen attention, repeat healthy habits and build reliable work capacity.</p>
+            </article>
+            <article class="stage" id="stage-3">
+              <div class="stage-no">PHASE 03 · DAYS 26–40+</div>
+              <p>Consolidate discipline, deepen focus and sustain a deliberate operating rhythm.</p>
+            </article>
+          </div>
+          <div class="brain-wrap">
+            <svg class="brain-graphic" viewBox="0 0 360 205" role="img" aria-label="Stylised conceptual brain illustration">
+              <path d="M65 119 C48 72 91 24 160 20 C232 13 293 54 290 112 C289 153 254 176 207 173 C192 194 176 198 160 178 C112 184 77 158 65 119Z" fill="#151b1e" stroke="#596064" stroke-width="2"/>
+              <path d="M67 112 C55 68 99 27 157 23 L158 111 C122 116 92 127 67 112Z" fill="rgba(121,200,210,.22)" stroke="#79c8d2" stroke-width="1.5"/>
+              <circle cx="190" cy="96" r="27" fill="rgba(200,169,107,.23)" stroke="#c8a96b" stroke-width="1.5"/>
+              <circle cx="164" cy="143" r="15" fill="rgba(209,124,120,.2)" stroke="#d17c78" stroke-width="1.5"/>
+              <path d="M204 119 Q252 126 236 151 Q211 151 204 119Z" fill="rgba(139,198,166,.2)" stroke="#8bc6a6" stroke-width="1.5"/>
+              <path d="M218 158 Q250 157 246 183 Q224 193 205 173Z" fill="#101719" stroke="#687174"/>
+              <g font-family="DM Mono, monospace" font-size="9" font-weight="500">
+                <text x="78" y="76" fill="#79c8d2">FOCUS</text>
+                <text x="174" y="99" fill="#e4c98e">HABITS</text>
+                <text x="132" y="168" fill="#d17c78">STRESS</text>
+                <text x="240" y="139" fill="#8bc6a6">MEMORY</text>
+              </g>
+            </svg>
+            <div class="brain-details">
+              <article class="detail"><h3>Executive focus <span id="focus-status">Building</span></h3><p>Deliberate attention, task initiation and reduced context switching.</p></article>
+              <article class="detail"><h3>Habit consistency <span id="habit-status">Building</span></h3><p>Repeated routines and practical control over digital distractions.</p></article>
+              <article class="detail"><h3>Stress regulation <span id="stress-status">Starting</span></h3><p>Breathing, recovery, realistic pacing and emotional steadiness.</p></article>
+              <article class="detail"><h3>Working memory <span id="memory-status">Building</span></h3><p>Structured review of commercial specifications and contract details.</p></article>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="stack">
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="section-kicker">03 / Daily execution</div>
+              <h2 class="panel-title">Discipline Protocol</h2>
+            </div>
+            <button class="btn" id="reset-btn" type="button">Reset today</button>
+          </div>
+          <div class="progress-head"><span id="task-count">0 / 10 COMPLETED</span><span id="task-percent">0%</span></div>
+          <div class="progress-track" role="progressbar" aria-label="Daily protocol completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="tasks" id="task-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="section-kicker">04 / Personal framework</div>
+              <h2 class="panel-title">Astrological Reference</h2>
+            </div>
+            <span class="tag gold">Lahiri · Sidereal</span>
+          </div>
+          <div class="astro-grid">
+            <article class="astro-item"><div class="planet">Saturn · Shani</div><div class="position">8H Natal · Transit 6H Pisces</div><div class="astro-role">Associated with patience, structure, responsibility and disciplined execution.</div></article>
+            <article class="astro-item"><div class="planet">Mercury · Budha</div><div class="position">11H Leo · Magha</div><div class="astro-role">Associated with communication, commercial networks, negotiation and analysis.</div></article>
+            <article class="astro-item"><div class="planet">Jupiter · Guru</div><div class="position">10H Cancer · Transit 11H Leo</div><div class="astro-role">Traditionally associated with guidance, institutional relationships and expansion.</div></article>
+            <article class="astro-item"><div class="planet">Venus · Shukra</div><div class="position">12H Virgo</div><div class="astro-role">A symbolic prompt for moderation, restraint, values and intentional choices.</div></article>
+          </div>
+          <p class="disclaimer">Astrological descriptions are presented as a traditional personal reference, not as verified predictions or financial guidance. Confirm chart placements independently if accuracy is important.</p>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="section-kicker">05 / Environmental controls</div>
+              <h2 class="panel-title">007 Perimeter Seals</h2>
+            </div>
+            <span class="tag red">Focus mode</span>
+          </div>
+          <div class="seals">
+            <div class="seal"><strong>01 / NO FEED SCROLLING</strong><br>Keep short-form social feeds outside the daily operating window.</div>
+            <div class="seal"><strong>02 / INTENTIONAL AUDIO</strong><br>Choose silence or purposeful audio; avoid automatic background consumption.</div>
+            <div class="seal"><strong>03 / PHONE BOUNDARIES</strong><br>Keep the phone away from the bed and bathroom; use a designated desk dock.</div>
+            <div class="seal"><strong>04 / ACTIVE REST</strong><br>Keep daytime breaks deliberate; protect sleep and recovery time.</div>
+          </div>
+        </section>
+      </aside>
+    </section>
+
+    <footer class="footer">SAMRAJYA COMMAND · 007 EXECUTIVE PROTOCOL · ANCHOR 04 NOV 2026 / 00:00 IST</footer>
+  </main>
+
+  <script>
+    "use strict";
+
+    // The anchor is fixed by design. Change this ISO timestamp to begin a new run.
+    const ANCHOR_START_MS = new Date("2026-11-04T00:00:00+05:30").getTime();
+    const DAY_MS = 86400000;
+    const STORAGE_PREFIX = "samrajya_007_tasks_";
+    const protocols = [
+      { id: "t1", title: "05:00 · Morning activation", desc: "Make the bed, stow the mat and begin the day without a screen." },
+      { id: "t2", title: "Screen-free morning routine", desc: "Keep the bathroom and first personal routine device-free." },
+      { id: "t3", title: "Hydration & reset", desc: "Hydrate steadily and complete a simple morning reset." },
+      { id: "t4", title: "Breathwork & mantra", desc: "15 minutes of comfortable breathing practice, followed by mantra." },
+      { id: "t5", title: "Physical conditioning", desc: "Complete an appropriate bodyweight session and a brisk walk." },
+      { id: "t6", title: "Desk air-gap protocol", desc: "Dock the phone away from reach; use grayscale or focus mode." },
+      { id: "t7", title: "Deep work · CIF sulphur", desc: "Review specifications, compliant documents and transaction next steps." },
+      { id: "t8", title: "Deliberate nutrition", desc: "Eat balanced meals, hydrate and avoid impulsive snacking." },
+      { id: "t9", title: "Evening reflection", desc: "Complete prayer, reflection or a quiet end-of-day practice." },
+      { id: "t10", title: "18:00 · Digital wind-down", desc: "Close non-essential apps and protect the evening routine." }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+    // These curves are intentionally illustrative dashboard indices, not health or luck measurements.
+    function ojasIndex(days) {
+      if (days <= 0) return 10;
+      const curve = 1 / (1 + Math.exp(-0.16 * (days - 16)));
+      return Math.min(100, Math.round((10 + 90 * curve) * 10) / 10);
+    }
+    function bhagyaIndex(days) {
+      if (days <= 0) return 15;
+      return Math.min(100, Math.round((15 + 1.2 * days + 0.02 * days * days) * 10) / 10);
+    }
+    function xFor(day) { return 48 + clamp(day, 0, 40) / 40 * 525; }
+    function yFor(value) { return 205 - clamp(value, 0, 100) / 100 * 180; }
+
+    function drawChart() {
+      const grid = $("chartGrid");
+      let markup = "";
+      [100, 75, 50, 25, 0].forEach((value) => {
+        const y = yFor(value);
+        markup += `<line x1="48" y1="${y}" x2="573" y2="${y}" stroke="#283034" stroke-width="1"/>`;
+        markup += `<text x="37" y="${y + 3}" fill="#778084" font-size="10" text-anchor="end">${value}%</text>`;
+      });
+      for (let day = 0; day <= 40; day += 5) {
+        const x = xFor(day);
+        markup += `<text x="${x}" y="229" fill="#778084" font-size="10" text-anchor="middle">D${day}</text>`;
+      }
+      grid.innerHTML = markup;
+
+      const ojas = [], luck = [];
+      for (let day = 0; day <= 40; day += .5) {
+        ojas.push(`${xFor(day).toFixed(1)},${yFor(ojasIndex(day)).toFixed(1)}`);
+        luck.push(`${xFor(day).toFixed(1)},${yFor(bhagyaIndex(day)).toFixed(1)}`);
+      }
+      const ojasPath = "M " + ojas.join(" L ");
+      $("ojasLine").setAttribute("d", ojasPath);
+      $("luckLine").setAttribute("d", "M " + luck.join(" L "));
+      $("ojasArea").setAttribute("d", `${ojasPath} L 573,205 L 48,205 Z`);
+    }
+
+    function updateMilestones(days) {
+      const phase = days < 10 ? 1 : days < 25 ? 2 : 3;
+      [1, 2, 3].forEach((n) => $("stage-" + n).classList.toggle("active", n === phase));
+      $("phase-pill").textContent = phase === 1 ? "Phase 1 · Foundation" : phase === 2 ? "Phase 2 · Consistency" : "Phase 3 · Consolidation";
+
+      const progress = Math.round(clamp(days / 40, 0, 1) * 100);
+      const status = progress < 25 ? "Building" : progress < 60 ? "Strengthening" : progress < 100 ? "Consolidating" : "40-day mark";
+      $("focus-status").textContent = status;
+      $("habit-status").textContent = status;
+      $("stress-status").textContent = days < 10 ? "Starting" : status;
+      $("memory-status").textContent = status;
+    }
+
+    function updateChartMarker(days) {
+      const x = xFor(days), ojas = ojasIndex(days), luck = bhagyaIndex(days);
+      $("markerLine").setAttribute("x1", x);
+      $("markerLine").setAttribute("x2", x);
+      $("ojasDot").setAttribute("cx", x);
+      $("ojasDot").setAttribute("cy", yFor(ojas));
+      $("luckDot").setAttribute("cx", x);
+      $("luckDot").setAttribute("cy", yFor(luck));
+      $("marker-label").textContent = `DAY ${days.toFixed(2)} · ${ojas}% / ${luck}%`;
+    }
+
+    function updateClock() {
+      const elapsed = Math.max(0, Date.now() - ANCHOR_START_MS);
+      const totalSeconds = Math.floor(elapsed / 1000);
+      const days = elapsed / DAY_MS;
+      const hours = Math.floor(totalSeconds % DAY_MS / 3600);
+      const minutes = Math.floor(totalSeconds % 3600 / 60);
+      const seconds = totalSeconds % 60;
+      const ojas = ojasIndex(days), luck = bhagyaIndex(days);
+
+      $("streak").textContent = `${days.toFixed(2)} DAYS`;
+      $("clock-detail").textContent = `${hours}h ${minutes}m ${seconds}s elapsed · IST`;
+      $("ojas-value").textContent = `${ojas}%`;
+      $("luck-value").textContent = `${luck}%`;
+      $("sync-tag").textContent = `LIVE · DAY ${days.toFixed(2)}`;
+      updateChartMarker(days);
+      updateMilestones(days);
+    }
+
+    function localDateKey() {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit"
+      }).formatToParts(new Date());
+      const part = (type) => parts.find((item) => item.type === type).value;
+      return `${part("year")}-${part("month")}-${part("day")}`;
+    }
+
+    function storageKey() { return STORAGE_PREFIX + localDateKey(); }
+    function loadTasks() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(storageKey()) || "{}");
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch {
+        return {};
+      }
+    }
+    let completedTasks = loadTasks();
+
+    function saveTasks() {
+      try { localStorage.setItem(storageKey(), JSON.stringify(completedTasks)); }
+      catch (error) { console.warn("Task progress could not be saved in this browser.", error); }
+    }
+
+    function updateTaskProgress() {
+      const completed = protocols.filter((task) => completedTasks[task.id]).length;
+      const percent = Math.round(completed / protocols.length * 100);
+      $("task-count").textContent = `${completed} / ${protocols.length} COMPLETED`;
+      $("task-percent").textContent = `${percent}%`;
+      $("progress-fill").style.width = `${percent}%`;
+      $("progress-track").setAttribute("aria-valuenow", String(percent));
+    }
+
+    function renderTasks() {
+      const list = $("task-list");
+      list.replaceChildren();
+      protocols.forEach((protocol) => {
+        const done = Boolean(completedTasks[protocol.id]);
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = `task${done ? " done" : ""}`;
+        row.setAttribute("aria-pressed", String(done));
+        row.innerHTML = `<span class="check" aria-hidden="true">${done ? "✓" : ""}</span><span><span class="task-title"></span><span class="task-desc"></span></span>`;
+        row.querySelector(".task-title").textContent = protocol.title;
+        row.querySelector(".task-desc").textContent = protocol.desc;
+        row.addEventListener("click", () => {
+          completedTasks[protocol.id] = !completedTasks[protocol.id];
+          saveTasks();
+          renderTasks();
+        });
+        list.appendChild(row);
+      });
+      updateTaskProgress();
+    }
+
+    $("reset-btn").addEventListener("click", () => {
+      if (!window.confirm("Reset all checklist items for today?")) return;
+      completedTasks = {};
+      saveTasks();
+      renderTasks();
+    });
+
+    drawChart();
+    renderTasks();
+    updateClock();
+    window.setInterval(updateClock, 1000);
+
+    // Refresh the checklist at local midnight so the next day starts clean.
+    let activeDate = localDateKey();
+    window.setInterval(() => {
+      const currentDate = localDateKey();
+      if (currentDate !== activeDate) {
+        activeDate = currentDate;
+        completedTasks = loadTasks();
+        renderTasks();
+      }
+    }, 30000);
+  </script>
+</body>
+</html>
