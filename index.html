@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SAMRAJYA // 007 SOVEREIGN COMMAND CENTER</title>
+  <!-- Chart.js placed in HEAD so it is fully available before inline scripts execute -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -46,6 +47,7 @@
       gap: 20px;
     }
 
+    /* TOP 007 HEADER */
     header {
       background: var(--bg-panel);
       border: 1px solid var(--border-subtle);
@@ -115,6 +117,7 @@
       color: var(--bond-cyan);
     }
 
+    /* METRIC HUD TILES */
     .metric-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -161,6 +164,7 @@
       color: var(--bond-platinum);
     }
 
+    /* DASHBOARD GRID */
     .dashboard-layout {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
@@ -203,6 +207,7 @@
       gap: 8px;
     }
 
+    /* BUTTONS */
     .btn-007 {
       background: transparent;
       border: 1px solid var(--border-subtle);
@@ -225,6 +230,7 @@
       color: var(--bond-gold);
     }
 
+    /* BRAIN INDICATORS */
     .brain-stage-indicator {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -302,6 +308,7 @@
       margin-top: 3px;
     }
 
+    /* CHECKLIST */
     .checklist {
       display: flex;
       flex-direction: column;
@@ -380,6 +387,7 @@
       color: var(--bond-platinum);
     }
 
+    /* ASTRO ENGINE */
     .astro-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -470,7 +478,7 @@
 
       <div class="metric-card">
         <span class="caption">Biological Ojas Potency</span>
-        <div class="big-val gold" id="ojas-metric-val">12%</div>
+        <div class="big-val gold" id="ojas-metric-val">10%</div>
         <span class="subtext" id="ojas-metric-sub">Shukra → Ojas Transmutation Curve</span>
       </div>
 
@@ -485,6 +493,7 @@
 
       <div class="col-7" style="display:flex; flex-direction:column; gap:20px;">
         
+        <!-- REAL TIME RECOVERY GRAPH (LUCK FACTOR & OJAS) -->
         <div class="bond-panel">
           <div class="bond-panel-header">
             <span class="bond-panel-title">Real-Time Ojas & Sovereign Luck Factor Telemetry</span>
@@ -493,11 +502,12 @@
           <p style="font-size:0.78rem; color:var(--bond-platinum);">
             Real-time multi-dimensional recovery model mapping exact elapsed containment time to classical Ojas synthesis (Shukra distillation curve) and Sovereign Luck Factor (9th Lord Bhagya + 11th Lord Labha activation).
           </p>
-          <div style="height: 250px; width: 100%;">
+          <div style="height: 250px; width: 100%; position: relative;">
             <canvas id="recoveryChart"></canvas>
           </div>
         </div>
 
+        <!-- BRAIN HEALING MATRIX -->
         <div class="bond-panel">
           <div class="bond-panel-header">
             <span class="bond-panel-title">Neuro-Biological Healing Radar</span>
@@ -643,6 +653,7 @@
   </div>
 
   <script>
+    // Hardcoded start anchor: November 4, 2026 at 00:00:00 IST (UTC+05:30)
     const ANCHOR_START_MS = new Date('2026-11-04T00:00:00+05:30').getTime();
 
     const dailyProtocols = [
@@ -663,6 +674,7 @@
 
     let recoveryChartInstance = null;
 
+    // Mathematical formulas directly synced to the elapsed days
     function calculateOjasPotency(days) {
       if (days <= 0) return 10;
       const curve = 1 / (1 + Math.exp(-0.16 * (days - 16)));
@@ -676,8 +688,10 @@
       return Math.min(100, Math.round(factor * 10) / 10);
     }
 
-    function initRecoveryChart(currentDays) {
-      const ctx = document.getElementById('recoveryChart').getContext('2d');
+    function initRecoveryChart() {
+      const canvas = document.getElementById('recoveryChart');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
 
       const timelinePoints = [0, 2, 5, 8, 12, 16, 20, 25, 30, 35, 40];
       const labels = timelinePoints.map(d => `Day ${d}`);
@@ -768,7 +782,10 @@
       document.getElementById('ojas-metric-val').innerText = `${ojasNow}%`;
       document.getElementById('luck-metric-val').innerText = `${luckNow}%`;
 
-      document.getElementById('graph-sync-tag').innerText = `SYNCED: DAY ${daysDisplay} (${ojasNow}% OJAS | ${luckNow}% LUCK)`;
+      const tag = document.getElementById('graph-sync-tag');
+      if (tag) {
+        tag.innerText = `SYNCED: DAY ${daysDisplay} (${ojasNow}% OJAS | ${luckNow}% LUCK)`;
+      }
 
       updateBrainStatus(daysExact);
     }
@@ -874,8 +891,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderTasks();
       updateRealTimeCounter();
-      const initialElapsed = Math.max(0, Date.now() - ANCHOR_START_MS) / (1000 * 86400);
-      initRecoveryChart(initialElapsed);
+      initRecoveryChart();
     });
   </script>
 </body>
