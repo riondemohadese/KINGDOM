@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMRAJYA // 007 SOVEREIGN COMMAND CENTER</title>
+  <!-- Chart.js placed in HEAD so it is fully available before inline scripts execute -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-base: #000000;
+      --bg-panel: #000000;
+      --bg-panel-elevated: #050505;
+      --bond-gunmetal: #121212;
+      --bond-titanium: #f0f0f0;
+      --bond-platinum: #888888;
+      --bond-gold: #c5a059;
+      --bond-gold-dim: #5c4720;
+      --bond-gold-glow: rgba(197, 160, 89, 0.18);
+      --bond-red: #c02626;
+      --bond-cyan: #17b8d4;
+      --bond-purple: #9d4edd;
+      --border-subtle: #1c1c1c;
+      --border-focus: #c5a059;
+      --success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Calisto MT', 'Calisto', serif;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--bond-titanium);
+      min-height: 100vh;
+      padding: 24px 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* TOP 007 HEADER */
+    header {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 24px 30px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--bond-gold), transparent);
+    }
+
+    .hud-title-box h1 {
+      font-size: 1.95rem;
+      letter-spacing: 4px;
+      color: #ffffff;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .hud-title-box p {
+      font-size: 0.85rem;
+      color: var(--bond-platinum);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .hud-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge-007 {
+      padding: 6px 14px;
+      background: var(--bg-panel-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 2px;
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+      color: var(--bond-titanium);
+    }
+
+    .badge-007.gold {
+      border-color: var(--bond-gold-dim);
+      color: var(--bond-gold);
+    }
+
+    .badge-007.red {
+      border-color: rgba(192, 38, 38, 0.4);
+      color: #ff6b6b;
+    }
+
+    .badge-007.cyan {
+      border-color: rgba(23, 184, 212, 0.4);
+      color: var(--bond-cyan);
+    }
+
+    .badge-007.purple {
+      border-color: rgba(157, 78, 221, 0.4);
+      color: #c77dff;
+    }
+
+    /* METRIC HUD TILES */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 1100px) {
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .metric-grid { grid-template-columns: 1fr; }
+    }
+
+    .metric-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      padding: 20px;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .metric-card .caption {
+      font-size: 0.78rem;
+      color: var(--bond-platinum);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .metric-card .big-val {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    .metric-card .big-val.gold { color: var(--bond-gold); }
+    .metric-card .big-val.cyan { color: var(--bond-cyan); }
+    .metric-card .big-val.purple { color: #c77dff; }
+
+    .metric-card .subtext {
+      font-size: 0.8rem;
+      color: var(--bond-platinum);
+    }
+
+    /* DASHBOARD GRID */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+    }
+
+    .col-7 { grid-column: span 7; }
+    .col-5 { grid-column: span 5; }
+
+    @media (max-width: 1024px) {
+      .col-7, .col-5 { grid-column: span 12; }
+    }
+
+    .bond-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .bond-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+
+    .bond-panel-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--bond-gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-007 {
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      color: var(--bond-titanium);
+      padding: 8px 16px;
+      border-radius: 2px;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-007:hover {
+      background: var(--bond-gunmetal);
+      border-color: var(--bond-gold);
+      color: var(--bond-gold);
+    }
+
+    /* PURE VECTOR CHART CONTAINER */
+    .telemetry-chart-wrap {
+      width: 100%;
+      background: #020202;
+      border: 1px solid #1a1a1a;
+      border-radius: 4px;
+      padding: 16px 12px 10px 12px;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 12px;
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-line {
+      width: 16px;
+      height: 3px;
+    }
+
+    /* BRAIN INDICATORS */
+    .brain-stage-
